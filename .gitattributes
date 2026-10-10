@@ -1,0 +1,3 @@
+# Keep the model backup byte-identical on every checkout so SHA256SUMS.txt stays valid
+# (core.autocrlf=true would otherwise rewrite LF text files as CRLF).
+ml-model-backup/** -text

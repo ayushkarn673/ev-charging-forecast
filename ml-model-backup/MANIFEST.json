@@ -1,0 +1,168 @@
+{
+  "created_from_commit": "fee183a",
+  "model_id": "ev_demand_lstm@sha256:14c51f034f14",
+  "files": [
+    {
+      "backup_path": "model/ev_demand_lstm.keras",
+      "original_path": "models/ev_demand_lstm.keras",
+      "sha256": "14c51f034f14f054355c0aaf065a741e3009ae9ba30fe258e789ff8fec439590",
+      "bytes": 431190,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "preprocessing/feature_scaler.pkl",
+      "original_path": "models/feature_scaler.pkl",
+      "sha256": "ca8533ef75661b27db14b125be3ac9933a29a455dede0768400a1c7f532c7c9d",
+      "bytes": 879,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "preprocessing/target_scaler.pkl",
+      "original_path": "models/target_scaler.pkl",
+      "sha256": "5d53a737efb1f299d1bcc4af9d2ed02ac774aa655b546e633d9f89b5c8c5de73",
+      "bytes": 719,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "preprocessing/features.json",
+      "original_path": "models/features.json",
+      "sha256": "0477584417c435223a6d566b4755574e05197b8ee090480dbbaa08733f33a828",
+      "bytes": 1874,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "training/model_config.json",
+      "original_path": "models/model_config.json",
+      "sha256": "ace80de224517552953abfef866da1fa7da3c0e6c06a2adfcb5f11043b13705f",
+      "bytes": 3800,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "training/training_summary.json",
+      "original_path": "models/training_summary.json",
+      "sha256": "f93687043ae591a361334e9f3d0caf70b0ca68e4c03c568a1a85b1e2c530e496",
+      "bytes": 1583,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "training/training_history.csv",
+      "original_path": "models/training_history.csv",
+      "sha256": "7596be5a1ae5fa154827daff2e17e0bcd06ffcbf26f395211d62b9ddf9a85697",
+      "bytes": 10720,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/test_metrics.json",
+      "original_path": "models/evaluation/test_metrics.json",
+      "sha256": "c26dbee0df1549355529256207e141d2965965748c775b0ef4f159e7e0b49af4",
+      "bytes": 7497,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "evaluation/test_metrics_table.csv",
+      "original_path": "models/evaluation/test_metrics_table.csv",
+      "sha256": "8e8c96d2c1c2e721e17652c23b1505c23419248c47c51486ceb52b2ea312b197",
+      "bytes": 403,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/test_predictions.csv",
+      "original_path": "models/evaluation/test_predictions.csv",
+      "sha256": "f36850032127316bd7dd2ac046980e3fc352dedefba0f53d7f68d1ec3a2920f2",
+      "bytes": 277283,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/evaluation_report.md",
+      "original_path": "docs/evaluation_report.md",
+      "sha256": "5e2e70e5734c90b827e6799fad31df277d113261617d44952f86f2b9c950a042",
+      "bytes": 4572,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "inference-data/hourly_utilization.csv",
+      "original_path": "dataset/processed/hourly_utilization.csv",
+      "sha256": "8e4bb452a8fc85abd16d468d6c20c7b32bc2e4fd9202c4383177bdf0105c5dc2",
+      "bytes": 2683821,
+      "required_for_inference": true
+    },
+    {
+      "backup_path": "environment/pyproject.toml",
+      "original_path": "ml-service/pyproject.toml",
+      "sha256": "bb6377b6dec8fcb20b286408f1b466c45b53623eeca5911003038497deb980b0",
+      "bytes": 703,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "environment/uv.lock",
+      "original_path": "ml-service/uv.lock",
+      "sha256": "8a40552774f7b9d0762e28768dc2da785d262071b4a9d0f4cac63aae7e8526e9",
+      "bytes": 146110,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "environment/.python-version",
+      "original_path": "ml-service/.python-version",
+      "sha256": "7b55f8e67b5623c4bef3fa691288da9437d79d3aba156de48d481db32ac7d16d",
+      "bytes": 5,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "docs/preprocessing_report.md",
+      "original_path": "docs/preprocessing_report.md",
+      "sha256": "1d9262acd238ac28a6f6b76cae759f6fda360d85da58f0b564df2d383cf0f8ea",
+      "bytes": 10164,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_actual_vs_predicted_timeseries.png",
+      "original_path": "docs/figures/eval_actual_vs_predicted_timeseries.png",
+      "sha256": "ae792dd12111e2869a0363556e8019157bcf4f35efb88a58b580b4a4dc09ae9a",
+      "bytes": 339257,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_mae_by_hour.png",
+      "original_path": "docs/figures/eval_mae_by_hour.png",
+      "sha256": "227b9fb24475e5ddc6d06fb0a06a938afa347092f1b6e53dab0eccde58526bd4",
+      "bytes": 68657,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_metric_comparison.png",
+      "original_path": "docs/figures/eval_metric_comparison.png",
+      "sha256": "d95833e8f191384176f1b151c7209aa71c491a4783571fc7e68a57799ff88242",
+      "bytes": 32232,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_residual_distribution.png",
+      "original_path": "docs/figures/eval_residual_distribution.png",
+      "sha256": "0149e5d39b9569d8e439c800954d38bb3a8e258a16faa06d67bf349fc4326e2e",
+      "bytes": 38318,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_residuals_over_time.png",
+      "original_path": "docs/figures/eval_residuals_over_time.png",
+      "sha256": "48fbe3db370b4dd1de4c0c347661400c97f5f72367a3f250f5d0299d7d8a6430",
+      "bytes": 114081,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/eval_scatter_lstm.png",
+      "original_path": "docs/figures/eval_scatter_lstm.png",
+      "sha256": "be727548e23f2ac34a783cc9a1707c100af1886e1989a701a8e625a815ffb273",
+      "bytes": 90324,
+      "required_for_inference": false
+    },
+    {
+      "backup_path": "evaluation/figures/training_loss_curves.png",
+      "original_path": "docs/figures/training_loss_curves.png",
+      "sha256": "833d287767180a758bf45f33ec6cb3f77171b100099974f0f3baf205414463da",
+      "bytes": 89631,
+      "required_for_inference": false
+    }
+  ],
+  "all_hashes_match_originals": true
+}

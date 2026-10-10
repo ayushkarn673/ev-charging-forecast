@@ -1,0 +1,266 @@
+{
+  "meta": {
+    "generated_utc": "2026-10-10T12:38:13+00:00",
+    "model_file": "models/ev_demand_lstm.keras",
+    "best_epoch": 111,
+    "n": 1728,
+    "capacity": 54,
+    "test_first_target_local": "2019-12-20 00:00-0800",
+    "test_last_target_local": "2020-02-29 23:00-0800",
+    "input_checks": {
+      "model_input_shape": [
+        null,
+        24,
+        11
+      ],
+      "model_output_shape": [
+        null,
+        1
+      ],
+      "test_X_shape": [
+        1728,
+        24,
+        11
+      ],
+      "test_y_shape": [
+        1728,
+        1
+      ],
+      "shapes_match_model": true,
+      "feature_order_matches_training": true,
+      "target_scaler_inverse_reproduces_unscaled_targets": true,
+      "target_scaler_differs_from_feature_scaler": true,
+      "unscaled_targets_match_hourly_utilization": true,
+      "all_targets_in_test_split": true,
+      "training_used_only_train_and_val": true,
+      "no_nan_in_test_inputs": true
+    }
+  },
+  "overall": {
+    "previous_hour": {
+      "n": 1728,
+      "mae_utilization": 0.025331997942794886,
+      "rmse_utilization": 0.05003759260960535,
+      "mae_pp": 2.5331997942794886,
+      "rmse_pp": 5.0037592609605355,
+      "mae_spaces": 1.3679278889109239,
+      "rmse_spaces": 2.702030000918689,
+      "bias_pp": 1.7277238330205065e-09,
+      "wape_percent": 23.36344167323081
+    },
+    "same_hour_last_week": {
+      "n": 1728,
+      "mae_utilization": 0.05023348378984638,
+      "rmse_utilization": 0.09610952492876673,
+      "mae_pp": 5.023348378984638,
+      "rmse_pp": 9.610952492876674,
+      "mae_spaces": 2.7126081246517044,
+      "rmse_spaces": 5.189914346153404,
+      "bias_pp": -0.02072569271672065,
+      "wape_percent": 46.329826459703824
+    },
+    "lstm": {
+      "n": 1728,
+      "mae_utilization": 0.01599062798911914,
+      "rmse_utilization": 0.023838456945081344,
+      "mae_pp": 1.5990627989119142,
+      "rmse_pp": 2.3838456945081345,
+      "mae_spaces": 0.8634939114124336,
+      "rmse_spaces": 1.2872766750343925,
+      "bias_pp": -0.08508604699281258,
+      "wape_percent": 14.747992052809167
+    }
+  },
+  "comparisons": {
+    "lstm_vs_previous_hour": {
+      "mae_difference_pp": -0.9341369953675747,
+      "mae_difference_ci95_pp": [
+        -1.2206693274612277,
+        -0.6204099225738573
+      ],
+      "mae_reduction_percent": 36.87577258916005,
+      "rmse_reduction_percent": 52.358905171418556,
+      "lstm_lower_mae": true,
+      "lstm_lower_rmse": true,
+      "difference_significant_95": true
+    },
+    "lstm_vs_same_hour_last_week": {
+      "mae_difference_pp": -3.4242855800727243,
+      "mae_difference_ci95_pp": [
+        -4.392136748825797,
+        -2.581798321837285
+      ],
+      "mae_reduction_percent": 68.16739198098121,
+      "rmse_reduction_percent": 75.19657186657656,
+      "lstm_lower_mae": true,
+      "lstm_lower_rmse": true,
+      "difference_significant_95": true
+    }
+  },
+  "by_subset": {
+    "weekday_non_holiday": {
+      "n": 1032,
+      "previous_hour": {
+        "mae_pp": 3.798717188032791,
+        "rmse_pp": 6.398264455973591
+      },
+      "same_hour_last_week": {
+        "mae_pp": 5.586049804723946,
+        "rmse_pp": 9.790499112090664
+      },
+      "lstm": {
+        "mae_pp": 2.00947059976136,
+        "rmse_pp": 2.894170242761758
+      }
+    },
+    "weekend": {
+      "n": 504,
+      "previous_hour": {
+        "mae_pp": 0.6933829459655324,
+        "rmse_pp": 1.2259293128511963
+      },
+      "same_hour_last_week": {
+        "mae_pp": 2.113352976457952,
+        "rmse_pp": 2.781279633737815
+      },
+      "lstm": {
+        "mae_pp": 0.8782404916711953,
+        "rmse_pp": 1.176268892900485
+      }
+    },
+    "holiday": {
+      "n": 240,
+      "previous_hour": {
+        "mae_pp": 0.566037514216248,
+        "rmse_pp": 1.1511989514873593
+      },
+      "same_hour_last_week": {
+        "mae_pp": 8.103925415671611,
+        "rmse_pp": 15.42431776311825
+      },
+      "lstm": {
+        "mae_pp": 1.2793578226410318,
+        "rmse_pp": 1.5569696307553516
+      }
+    },
+    "weekday_daytime_07_19": {
+      "n": 559,
+      "previous_hour": {
+        "mae_pp": 6.519477329078242,
+        "rmse_pp": 8.617459011190272
+      },
+      "same_hour_last_week": {
+        "mae_pp": 8.974278881330722,
+        "rmse_pp": 13.151427654713077
+      },
+      "lstm": {
+        "mae_pp": 3.03587921152028,
+        "rmse_pp": 3.813241974838514
+      }
+    }
+  },
+  "mae_pp_by_local_hour": {
+    "previous_hour": [
+      0.12069169085928136,
+      0.07697224810620151,
+      0.089406974103219,
+      0.006895862539609296,
+      0.04048753333669158,
+      0.05923614097750852,
+      0.20983336480305298,
+      0.7942903002933495,
+      5.235166678388624,
+      9.877948646544397,
+      7.4617472382917995,
+      3.133482137851376,
+      1.6781723508850568,
+      1.9645666771734756,
+      1.6487221996270947,
+      1.675605493216341,
+      3.344006888575521,
+      7.26824727874775,
+      7.439868078732036,
+      4.3747555513966825,
+      1.671295854981018,
+      1.1364694452931998,
+      1.1748569618223856,
+      0.314069466162059
+    ],
+    "same_hour_last_week": [
+      1.475972224885308,
+      1.402105569103691,
+      1.4056375124687948,
+      1.3889000096797943,
+      1.3854861206409212,
+      1.3275361209904155,
+      1.4295930690664809,
+      1.6287527870833047,
+      3.6304764155831193,
+      7.624601482360376,
+      9.717208290740352,
+      10.85882652983678,
+      10.507036106501934,
+      10.979911073730555,
+      11.140069365425243,
+      11.002918029785032,
+      10.109934742428695,
+      7.367837357803723,
+      4.530193041691308,
+      3.3888708135239365,
+      2.5963499817082223,
+      2.367129171480456,
+      1.7566833331005025,
+      1.5383319460123779
+    ],
+    "lstm": [
+      0.7229309265514733,
+      0.5800519040147062,
+      0.5530116133741103,
+      0.5579691140964214,
+      0.5633420990003895,
+      0.5803652608948242,
+      0.6942763522197816,
+      0.8780502371438261,
+      2.762950351461768,
+      2.0607279778535785,
+      2.881220639553956,
+      2.714011194701824,
+      2.575179418393721,
+      2.777114812569279,
+      2.2947820653725004,
+      2.363807933094601,
+      2.192047441429976,
+      2.1117070786810173,
+      2.14317505273761,
+      1.8778482316217076,
+      1.2560249244314845,
+      1.1682686526910402,
+      1.136744872201234,
+      0.9318990197951078
+    ]
+  },
+  "long_session_sensitivity": {
+    "what_it_measures": "target-definition sensitivity of the evaluation, NOT a model trained on the alternative target",
+    "target_difference_mae_pp": 0.24700736791852773,
+    "target_difference_max_pp": 1.8519023265838652,
+    "hours_where_targets_differ": 695,
+    "lstm_vs_alt_target": {
+      "n": 1728,
+      "mae_utilization": 0.0167049717649967,
+      "rmse_utilization": 0.024182097213896785,
+      "mae_pp": 1.6704971764996701,
+      "rmse_pp": 2.4182097213896787,
+      "mae_spaces": 0.9020684753098218,
+      "rmse_spaces": 1.3058332495504263,
+      "bias_pp": 0.16192112720538948,
+      "wape_percent": 15.765992498763648
+    }
+  },
+  "lstm_prediction_range": [
+    -0.007985715754330158,
+    0.5358827710151672
+  ],
+  "lstm_predictions_below_0": 5,
+  "lstm_predictions_above_1": 0,
+  "test_hours_with_zero_actual": 348
+}

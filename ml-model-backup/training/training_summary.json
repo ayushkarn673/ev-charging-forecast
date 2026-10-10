@@ -1,0 +1,65 @@
+{
+  "generated_utc": "2026-10-10T11:58:11+00:00",
+  "epochs_completed": 121,
+  "max_epochs": 300,
+  "stopped_early": true,
+  "best_epoch": 111,
+  "best_val_loss_mse_scaled": 0.0008660940220579505,
+  "val_mae_scaled_at_best_epoch": 0.020271791145205498,
+  "train_loss_at_best_epoch": 0.0010634942445904016,
+  "train_mae_at_best_epoch": 0.023929456248879433,
+  "final_epoch": {
+    "loss": 0.0010037547908723354,
+    "mae": 0.02323911152780056,
+    "val_loss": 0.000926077482290566,
+    "val_mae": 0.020675698295235634
+  },
+  "reloaded_model_val_loss": 0.0008660940220579505,
+  "reloaded_model_val_mae_scaled": 0.020271791145205498,
+  "reloaded_model_val_mae_utilization": 0.015413,
+  "reloaded_model_val_mae_spaces": 0.8323,
+  "note": "Validation figures only. Training loss includes dropout; test metrics are computed in Phase 3.",
+  "training_duration_seconds": 332.49,
+  "seconds_per_epoch": 2.748,
+  "trainable_parameters": 32417,
+  "data_shapes": {
+    "X_train": [
+      7968,
+      24,
+      11
+    ],
+    "y_train": [
+      7968,
+      1
+    ],
+    "X_val": [
+      1729,
+      24,
+      11
+    ],
+    "y_val": [
+      1729,
+      1
+    ]
+  },
+  "versions": {
+    "python": "3.12.7",
+    "tensorflow": "2.20.0",
+    "keras": "3.15.1",
+    "numpy": "2.1.3"
+  },
+  "device": "CPU",
+  "config": {
+    "lstm_units": [
+      64,
+      32
+    ],
+    "dropout": 0.2,
+    "dense_units": 16,
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_epochs": 300,
+    "early_stopping_patience": 10,
+    "seed": 42
+  }
+}
