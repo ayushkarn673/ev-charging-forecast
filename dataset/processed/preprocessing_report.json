@@ -1,0 +1,412 @@
+{
+  "generated_utc": "2026-10-10T11:32:17+00:00",
+  "raw_file": "dataset/raw/acn_caltech_sessions.csv",
+  "site": "caltech",
+  "validation_full_raw_file": {
+    "records": 31424,
+    "columns": [
+      "_id",
+      "sessionID",
+      "siteID",
+      "clusterID",
+      "stationID",
+      "spaceID",
+      "connectionTime",
+      "disconnectTime",
+      "doneChargingTime",
+      "kWhDelivered",
+      "timezone"
+    ],
+    "missing_values_raw": {
+      "_id": 0,
+      "sessionID": 0,
+      "siteID": 0,
+      "clusterID": 0,
+      "stationID": 0,
+      "spaceID": 0,
+      "connectionTime": 0,
+      "disconnectTime": 0,
+      "doneChargingTime": 2055,
+      "kWhDelivered": 0,
+      "timezone": 0
+    },
+    "timezone_values": [
+      "America/Los_Angeles"
+    ],
+    "site_ids": [
+      "0002",
+      "2"
+    ],
+    "coverage_local": [
+      "2018-04-25 04:08:04-07:00",
+      "2021-09-13 18:52:37-07:00"
+    ],
+    "stations": 55,
+    "spaces": 55,
+    "station_to_space_one_to_one": true,
+    "duplicate_id": 0,
+    "duplicate_sessionID": 0,
+    "duplicate_station_and_connectionTime": 0,
+    "exact_duplicate_rows": 0,
+    "unparseable_or_missing_connectionTime": 0,
+    "unparseable_or_missing_disconnectTime": 0,
+    "disconnect_not_after_connect": 0,
+    "missing_kWh": 0,
+    "negative_kWh": 0,
+    "zero_kWh": 0,
+    "min_kWh": 0.501,
+    "sessions_starting_on_exact_hour": 6,
+    "sessions_ending_on_exact_hour": 6,
+    "overlapping_sessions_same_space": 0,
+    "doneChargingTime": {
+      "missing": 2055,
+      "missing_by_year": {
+        "2018": 8,
+        "2019": 466,
+        "2020": 443,
+        "2021": 1138
+      },
+      "median_kWh_when_missing": 11.782,
+      "median_kWh_when_present": 6.588,
+      "earlier_than_connectionTime": 26,
+      "later_than_disconnectTime": 1180
+    }
+  },
+  "cleaning": {
+    "input_rows": 31424,
+    "dropped_missing_or_unparseable_connectionTime": 0,
+    "dropped_missing_or_unparseable_disconnectTime": 0,
+    "dropped_disconnect_not_after_connect": 0,
+    "dropped_duplicate_id": 0,
+    "dropped_duplicate_station_and_connectionTime": 0,
+    "dropped_missing_or_negative_kWh": 0,
+    "kept_flagged_over_24h": 259,
+    "kept_flagged_over_48h": 79,
+    "kept_missing_doneChargingTime": 2055,
+    "output_rows": 31424
+  },
+  "window_local": [
+    "2018-11-01",
+    "2020-03-01"
+  ],
+  "hours_in_window": 11665,
+  "sessions_starting_in_window": 14471,
+  "sessions_overlapping_window": 14479,
+  "long_sessions_in_window": {
+    "over_24h": 114,
+    "over_48h": 35
+  },
+  "duration_hours_in_window": {
+    "mean": 6.093,
+    "median": 5.796,
+    "p95": 11.714,
+    "max": 245.269
+  },
+  "capacity_mode": "installed_fixed",
+  "installed_capacity_spaces": 54,
+  "overlapping_intervals_merged": 0,
+  "occupied_spaces": {
+    "mean": 7.5632,
+    "median": 3.0,
+    "p95": 26.7707,
+    "max": 41.6581
+  },
+  "utilization": {
+    "mean": 0.1401,
+    "median": 0.0556,
+    "p95": 0.4958,
+    "max": 0.7714
+  },
+  "peak_occupied_spaces_max": 43,
+  "hours_peak_at_capacity": 0,
+  "hours_zero_occupancy": 1090,
+  "hours_utilization_over": {
+    "40pct": 1602,
+    "70pct": 43,
+    "90pct": 0
+  },
+  "max_utilization_hour_local": "2018-11-06 13:00:00-08:00",
+  "mean_utilization_by_local_hour": {
+    "weekday": [
+      0.0297,
+      0.028,
+      0.0266,
+      0.0257,
+      0.0252,
+      0.0254,
+      0.0299,
+      0.0433,
+      0.1158,
+      0.2675,
+      0.3752,
+      0.4125,
+      0.4206,
+      0.4412,
+      0.4464,
+      0.4307,
+      0.3786,
+      0.2778,
+      0.1655,
+      0.1018,
+      0.0734,
+      0.0561,
+      0.0415,
+      0.0346
+    ],
+    "weekend": [
+      0.0357,
+      0.034,
+      0.0339,
+      0.0331,
+      0.0326,
+      0.0324,
+      0.0323,
+      0.0338,
+      0.0429,
+      0.0524,
+      0.0626,
+      0.0678,
+      0.0628,
+      0.065,
+      0.0623,
+      0.0612,
+      0.061,
+      0.0533,
+      0.0449,
+      0.0444,
+      0.0405,
+      0.0362,
+      0.0314,
+      0.0297
+    ]
+  },
+  "sensitivity": {
+    "utilization_excl_over_48h": {
+      "mean": 0.1352,
+      "median": 0.0528,
+      "p95": 0.4922,
+      "max": 0.7652
+    },
+    "mean_abs_diff_vs_main_excl_over_48h": 0.00487,
+    "utilization_active_month": {
+      "mean": 0.159,
+      "median": 0.0638,
+      "p95": 0.5679,
+      "max": 0.786
+    },
+    "active_spaces_month_range": [
+      42,
+      53
+    ]
+  },
+  "holidays_in_window": [
+    "2018-11-22",
+    "2018-12-24",
+    "2018-12-25",
+    "2018-12-26",
+    "2018-12-27",
+    "2018-12-28",
+    "2018-12-29",
+    "2018-12-30",
+    "2018-12-31",
+    "2019-01-01",
+    "2019-01-21",
+    "2019-02-18",
+    "2019-05-27",
+    "2019-07-04",
+    "2019-09-02",
+    "2019-11-28",
+    "2019-12-25",
+    "2019-12-26",
+    "2019-12-27",
+    "2019-12-28",
+    "2019-12-29",
+    "2019-12-30",
+    "2019-12-31",
+    "2020-01-01",
+    "2020-01-20",
+    "2020-02-17"
+  ],
+  "daily_sessions_normal_weekday": {
+    "median": 39.0,
+    "min": 6
+  },
+  "daily_sessions_on_holidays": {
+    "2018-11-22": 9,
+    "2018-12-24": 3,
+    "2018-12-25": 6,
+    "2018-12-26": 6,
+    "2018-12-27": 5,
+    "2018-12-28": 11,
+    "2018-12-29": 8,
+    "2018-12-30": 10,
+    "2018-12-31": 9,
+    "2019-01-01": 8,
+    "2019-01-21": 19,
+    "2019-02-18": 19,
+    "2019-05-27": 11,
+    "2019-07-04": 6,
+    "2019-09-02": 13,
+    "2019-11-28": 1,
+    "2019-12-25": 0,
+    "2019-12-26": 1,
+    "2019-12-27": 8,
+    "2019-12-28": 5,
+    "2019-12-29": 6,
+    "2019-12-30": 10,
+    "2019-12-31": 7,
+    "2020-01-01": 5,
+    "2020-01-20": 11,
+    "2020-02-17": 13
+  },
+  "suspected_outage_days": [],
+  "confirmed_invalid_periods": [],
+  "hours_without_lag_168": 168,
+  "first_input_valid_hour_local": "2018-11-07 23:00:00-08:00",
+  "arrivals_per_hour_mean": 1.241,
+  "energy_kwh_completed_in_window": 128001.4,
+  "splits": {
+    "train": {
+      "start_local": "2018-11-01 00:00:00-07:00",
+      "end_local": "2019-10-06 23:00:00-07:00",
+      "hours": 8160,
+      "share_of_hours": 0.6995,
+      "input_valid_hours": 7992,
+      "X_shape": [
+        7968,
+        24,
+        11
+      ],
+      "y_shape": [
+        7968,
+        1
+      ],
+      "first_target_local": "2018-11-08 23:00:00-08:00",
+      "last_target_local": "2019-10-06 23:00:00-07:00",
+      "utilization": {
+        "mean": 0.1508,
+        "median": 0.065,
+        "p95": 0.5107,
+        "max": 0.7714
+      },
+      "holidays": [
+        "2018-11-22",
+        "2018-12-24",
+        "2018-12-25",
+        "2018-12-26",
+        "2018-12-27",
+        "2018-12-28",
+        "2018-12-29",
+        "2018-12-30",
+        "2018-12-31",
+        "2019-01-01",
+        "2019-01-21",
+        "2019-02-18",
+        "2019-05-27",
+        "2019-07-04",
+        "2019-09-02"
+      ]
+    },
+    "val": {
+      "start_local": "2019-10-07 00:00:00-07:00",
+      "end_local": "2019-12-18 23:00:00-08:00",
+      "hours": 1753,
+      "share_of_hours": 0.1503,
+      "input_valid_hours": 1753,
+      "X_shape": [
+        1729,
+        24,
+        11
+      ],
+      "y_shape": [
+        1729,
+        1
+      ],
+      "first_target_local": "2019-10-08 00:00:00-07:00",
+      "last_target_local": "2019-12-18 23:00:00-08:00",
+      "utilization": {
+        "mean": 0.121,
+        "median": 0.037,
+        "p95": 0.4499,
+        "max": 0.5753
+      },
+      "holidays": [
+        "2019-11-28"
+      ]
+    },
+    "test": {
+      "start_local": "2019-12-19 00:00:00-08:00",
+      "end_local": "2020-02-29 23:00:00-08:00",
+      "hours": 1752,
+      "share_of_hours": 0.1502,
+      "input_valid_hours": 1752,
+      "X_shape": [
+        1728,
+        24,
+        11
+      ],
+      "y_shape": [
+        1728,
+        1
+      ],
+      "first_target_local": "2019-12-20 00:00:00-08:00",
+      "last_target_local": "2020-02-29 23:00:00-08:00",
+      "utilization": {
+        "mean": 0.109,
+        "median": 0.0334,
+        "p95": 0.4827,
+        "max": 0.6088
+      },
+      "holidays": [
+        "2019-12-25",
+        "2019-12-26",
+        "2019-12-27",
+        "2019-12-28",
+        "2019-12-29",
+        "2019-12-30",
+        "2019-12-31",
+        "2020-01-01",
+        "2020-01-20",
+        "2020-02-17"
+      ]
+    }
+  },
+  "features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "arrivals",
+    "energy_kwh_completed",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "scaled_features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "arrivals",
+    "energy_kwh_completed"
+  ],
+  "feature_scaler_train_min": {
+    "utilization": 0.0,
+    "utilization_lag_168": 0.0,
+    "utilization_roll_mean_24": 0.00045,
+    "arrivals": 0.0,
+    "energy_kwh_completed": 0.0
+  },
+  "feature_scaler_train_max": {
+    "utilization": 0.760293,
+    "utilization_lag_168": 0.771445,
+    "utilization_roll_mean_24": 0.367595,
+    "arrivals": 20.0,
+    "energy_kwh_completed": 216.118
+  },
+  "target_scaler_train_range": [
+    0.0,
+    0.760293
+  ]
+}

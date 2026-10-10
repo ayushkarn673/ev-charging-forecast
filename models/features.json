@@ -1,0 +1,84 @@
+{
+  "site": "caltech",
+  "interval": "1h",
+  "local_timezone": "America/Los_Angeles",
+  "sequence_length": 24,
+  "horizon": 1,
+  "target": "utilization",
+  "target_definition": "time-weighted mean occupied spaces in the hour / installed capacity",
+  "installed_capacity_spaces": 54,
+  "capacity_mode": "installed_fixed",
+  "features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "arrivals",
+    "energy_kwh_completed",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "scaled_features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "arrivals",
+    "energy_kwh_completed"
+  ],
+  "unscaled_features": [
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "rolling_window": 24,
+  "weekly_lag": 168,
+  "interval_convention": "half-open [connectionTime, disconnectTime)",
+  "energy_attribution": "kWhDelivered assigned to the hour of disconnectTime",
+  "holidays": {
+    "federal_not_observed": [
+      "Columbus Day",
+      "Veterans Day"
+    ],
+    "institute_closures": [
+      [
+        "2018-12-24",
+        "2019-01-01"
+      ],
+      [
+        "2019-12-25",
+        "2020-01-01"
+      ]
+    ]
+  },
+  "analysis_window_local": [
+    "2018-11-01",
+    "2020-03-01"
+  ],
+  "split_ratios": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "split_periods_local": {
+    "train": [
+      "2018-11-01 00:00:00-07:00",
+      "2019-10-06 23:00:00-07:00"
+    ],
+    "val": [
+      "2019-10-07 00:00:00-07:00",
+      "2019-12-18 23:00:00-08:00"
+    ],
+    "test": [
+      "2019-12-19 00:00:00-08:00",
+      "2020-02-29 23:00:00-08:00"
+    ]
+  },
+  "feature_scaler": "feature_scaler.pkl",
+  "target_scaler": "target_scaler.pkl"
+}

@@ -1,0 +1,32 @@
+[project]
+name = "ev-demand-ml-service"
+version = "0.1.0"
+description = "LSTM EV charging demand forecasting (ACN-Data) and FastAPI prediction service"
+# TensorFlow does not support Python 3.14 yet
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "pandas>=2.2,<3",
+    "numpy>=1.26,<2.2",
+    "scikit-learn>=1.5,<1.8",
+    "tensorflow>=2.17,<2.21",
+    "matplotlib>=3.9,<4",
+    "joblib>=1.4",
+    "statsmodels>=0.14,<0.15",
+    "requests>=2.32",
+    "python-dotenv>=1.0",
+    "fastapi>=0.115,<1",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.7,<3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

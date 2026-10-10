@@ -1,0 +1,210 @@
+INFO Config: {'lstm_units': (64, 32), 'dropout': 0.2, 'dense_units': 16, 'learning_rate': 0.001, 'batch_size': 256, 'max_epochs': 100, 'early_stopping_patience': 10, 'seed': 42}
+INFO Shapes: {'X_train': [7968, 24, 11], 'y_train': [7968, 1], 'X_val': [1729, 24, 11], 'y_val': [1729, 1]}
+Epoch 1/100
+2026-10-10 17:11:10.199732: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+2026-10-10 17:11:19.303735: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+32/32 - 11s - 333ms/step - loss: 0.0317 - mae: 0.1176 - val_loss: 0.0063 - val_mae: 0.0575
+Epoch 2/100
+32/32 - 4s - 124ms/step - loss: 0.0105 - mae: 0.0728 - val_loss: 0.0041 - val_mae: 0.0428
+Epoch 3/100
+32/32 - 5s - 158ms/step - loss: 0.0086 - mae: 0.0651 - val_loss: 0.0036 - val_mae: 0.0404
+Epoch 4/100
+32/32 - 3s - 109ms/step - loss: 0.0071 - mae: 0.0592 - val_loss: 0.0035 - val_mae: 0.0400
+Epoch 5/100
+32/32 - 5s - 155ms/step - loss: 0.0063 - mae: 0.0558 - val_loss: 0.0033 - val_mae: 0.0387
+Epoch 6/100
+32/32 - 5s - 169ms/step - loss: 0.0060 - mae: 0.0541 - val_loss: 0.0031 - val_mae: 0.0374
+Epoch 7/100
+32/32 - 3s - 88ms/step - loss: 0.0055 - mae: 0.0524 - val_loss: 0.0031 - val_mae: 0.0374
+Epoch 8/100
+32/32 - 5s - 161ms/step - loss: 0.0054 - mae: 0.0515 - val_loss: 0.0030 - val_mae: 0.0374
+Epoch 9/100
+32/32 - 3s - 79ms/step - loss: 0.0051 - mae: 0.0505 - val_loss: 0.0029 - val_mae: 0.0369
+Epoch 10/100
+32/32 - 3s - 82ms/step - loss: 0.0050 - mae: 0.0497 - val_loss: 0.0028 - val_mae: 0.0365
+Epoch 11/100
+32/32 - 3s - 100ms/step - loss: 0.0048 - mae: 0.0487 - val_loss: 0.0027 - val_mae: 0.0360
+Epoch 12/100
+32/32 - 3s - 98ms/step - loss: 0.0045 - mae: 0.0471 - val_loss: 0.0026 - val_mae: 0.0350
+Epoch 13/100
+32/32 - 4s - 128ms/step - loss: 0.0043 - mae: 0.0467 - val_loss: 0.0026 - val_mae: 0.0342
+Epoch 14/100
+32/32 - 4s - 121ms/step - loss: 0.0041 - mae: 0.0458 - val_loss: 0.0025 - val_mae: 0.0339
+Epoch 15/100
+32/32 - 3s - 81ms/step - loss: 0.0040 - mae: 0.0450 - val_loss: 0.0025 - val_mae: 0.0335
+Epoch 16/100
+32/32 - 3s - 96ms/step - loss: 0.0039 - mae: 0.0448 - val_loss: 0.0024 - val_mae: 0.0331
+Epoch 17/100
+32/32 - 5s - 144ms/step - loss: 0.0037 - mae: 0.0439 - val_loss: 0.0024 - val_mae: 0.0332
+Epoch 18/100
+32/32 - 3s - 86ms/step - loss: 0.0037 - mae: 0.0440 - val_loss: 0.0023 - val_mae: 0.0327
+Epoch 19/100
+32/32 - 2s - 75ms/step - loss: 0.0035 - mae: 0.0427 - val_loss: 0.0023 - val_mae: 0.0325
+Epoch 20/100
+32/32 - 3s - 101ms/step - loss: 0.0034 - mae: 0.0420 - val_loss: 0.0023 - val_mae: 0.0325
+Epoch 21/100
+32/32 - 5s - 161ms/step - loss: 0.0033 - mae: 0.0415 - val_loss: 0.0022 - val_mae: 0.0320
+Epoch 22/100
+32/32 - 5s - 157ms/step - loss: 0.0033 - mae: 0.0416 - val_loss: 0.0021 - val_mae: 0.0313
+Epoch 23/100
+32/32 - 5s - 162ms/step - loss: 0.0031 - mae: 0.0405 - val_loss: 0.0021 - val_mae: 0.0312
+Epoch 24/100
+32/32 - 5s - 162ms/step - loss: 0.0029 - mae: 0.0396 - val_loss: 0.0021 - val_mae: 0.0314
+Epoch 25/100
+32/32 - 2s - 77ms/step - loss: 0.0029 - mae: 0.0393 - val_loss: 0.0021 - val_mae: 0.0317
+Epoch 26/100
+32/32 - 3s - 82ms/step - loss: 0.0029 - mae: 0.0393 - val_loss: 0.0020 - val_mae: 0.0311
+Epoch 27/100
+32/32 - 3s - 82ms/step - loss: 0.0028 - mae: 0.0388 - val_loss: 0.0020 - val_mae: 0.0309
+Epoch 28/100
+32/32 - 3s - 79ms/step - loss: 0.0028 - mae: 0.0388 - val_loss: 0.0021 - val_mae: 0.0315
+Epoch 29/100
+32/32 - 2s - 75ms/step - loss: 0.0027 - mae: 0.0382 - val_loss: 0.0021 - val_mae: 0.0321
+Epoch 30/100
+32/32 - 3s - 91ms/step - loss: 0.0026 - mae: 0.0376 - val_loss: 0.0019 - val_mae: 0.0304
+Epoch 31/100
+32/32 - 6s - 180ms/step - loss: 0.0027 - mae: 0.0377 - val_loss: 0.0018 - val_mae: 0.0299
+Epoch 32/100
+32/32 - 5s - 141ms/step - loss: 0.0026 - mae: 0.0371 - val_loss: 0.0018 - val_mae: 0.0297
+Epoch 33/100
+32/32 - 3s - 86ms/step - loss: 0.0024 - mae: 0.0367 - val_loss: 0.0017 - val_mae: 0.0295
+Epoch 34/100
+32/32 - 5s - 156ms/step - loss: 0.0025 - mae: 0.0365 - val_loss: 0.0018 - val_mae: 0.0297
+Epoch 35/100
+32/32 - 3s - 87ms/step - loss: 0.0024 - mae: 0.0362 - val_loss: 0.0017 - val_mae: 0.0292
+Epoch 36/100
+32/32 - 5s - 159ms/step - loss: 0.0024 - mae: 0.0363 - val_loss: 0.0017 - val_mae: 0.0288
+Epoch 37/100
+32/32 - 3s - 90ms/step - loss: 0.0023 - mae: 0.0356 - val_loss: 0.0016 - val_mae: 0.0286
+Epoch 38/100
+32/32 - 5s - 160ms/step - loss: 0.0023 - mae: 0.0351 - val_loss: 0.0015 - val_mae: 0.0279
+Epoch 39/100
+32/32 - 3s - 108ms/step - loss: 0.0022 - mae: 0.0347 - val_loss: 0.0016 - val_mae: 0.0285
+Epoch 40/100
+32/32 - 5s - 141ms/step - loss: 0.0022 - mae: 0.0346 - val_loss: 0.0015 - val_mae: 0.0276
+Epoch 41/100
+32/32 - 3s - 102ms/step - loss: 0.0022 - mae: 0.0343 - val_loss: 0.0014 - val_mae: 0.0272
+Epoch 42/100
+32/32 - 3s - 82ms/step - loss: 0.0021 - mae: 0.0342 - val_loss: 0.0014 - val_mae: 0.0268
+Epoch 43/100
+32/32 - 4s - 109ms/step - loss: 0.0020 - mae: 0.0333 - val_loss: 0.0014 - val_mae: 0.0269
+Epoch 44/100
+32/32 - 4s - 136ms/step - loss: 0.0020 - mae: 0.0329 - val_loss: 0.0014 - val_mae: 0.0271
+Epoch 45/100
+32/32 - 3s - 92ms/step - loss: 0.0020 - mae: 0.0328 - val_loss: 0.0014 - val_mae: 0.0265
+Epoch 46/100
+32/32 - 5s - 161ms/step - loss: 0.0019 - mae: 0.0323 - val_loss: 0.0013 - val_mae: 0.0262
+Epoch 47/100
+32/32 - 3s - 84ms/step - loss: 0.0020 - mae: 0.0328 - val_loss: 0.0014 - val_mae: 0.0264
+Epoch 48/100
+32/32 - 3s - 94ms/step - loss: 0.0019 - mae: 0.0326 - val_loss: 0.0014 - val_mae: 0.0265
+Epoch 49/100
+32/32 - 3s - 87ms/step - loss: 0.0019 - mae: 0.0322 - val_loss: 0.0013 - val_mae: 0.0255
+Epoch 50/100
+32/32 - 3s - 86ms/step - loss: 0.0019 - mae: 0.0325 - val_loss: 0.0012 - val_mae: 0.0254
+Epoch 51/100
+32/32 - 3s - 91ms/step - loss: 0.0018 - mae: 0.0317 - val_loss: 0.0012 - val_mae: 0.0254
+Epoch 52/100
+32/32 - 4s - 111ms/step - loss: 0.0019 - mae: 0.0320 - val_loss: 0.0012 - val_mae: 0.0250
+Epoch 53/100
+32/32 - 4s - 135ms/step - loss: 0.0018 - mae: 0.0312 - val_loss: 0.0012 - val_mae: 0.0246
+Epoch 54/100
+32/32 - 3s - 106ms/step - loss: 0.0017 - mae: 0.0309 - val_loss: 0.0011 - val_mae: 0.0243
+Epoch 55/100
+32/32 - 2s - 76ms/step - loss: 0.0017 - mae: 0.0305 - val_loss: 0.0012 - val_mae: 0.0250
+Epoch 56/100
+32/32 - 3s - 85ms/step - loss: 0.0016 - mae: 0.0301 - val_loss: 0.0012 - val_mae: 0.0243
+Epoch 57/100
+32/32 - 3s - 85ms/step - loss: 0.0017 - mae: 0.0304 - val_loss: 0.0011 - val_mae: 0.0242
+Epoch 58/100
+32/32 - 5s - 166ms/step - loss: 0.0016 - mae: 0.0303 - val_loss: 0.0011 - val_mae: 0.0241
+Epoch 59/100
+32/32 - 3s - 82ms/step - loss: 0.0017 - mae: 0.0299 - val_loss: 0.0011 - val_mae: 0.0241
+Epoch 60/100
+32/32 - 3s - 79ms/step - loss: 0.0016 - mae: 0.0294 - val_loss: 0.0011 - val_mae: 0.0237
+Epoch 61/100
+32/32 - 3s - 89ms/step - loss: 0.0016 - mae: 0.0292 - val_loss: 0.0011 - val_mae: 0.0235
+Epoch 62/100
+32/32 - 5s - 171ms/step - loss: 0.0015 - mae: 0.0288 - val_loss: 0.0011 - val_mae: 0.0236
+Epoch 63/100
+32/32 - 2s - 76ms/step - loss: 0.0015 - mae: 0.0293 - val_loss: 0.0011 - val_mae: 0.0239
+Epoch 64/100
+32/32 - 3s - 84ms/step - loss: 0.0015 - mae: 0.0289 - val_loss: 0.0010 - val_mae: 0.0232
+Epoch 65/100
+32/32 - 2s - 78ms/step - loss: 0.0016 - mae: 0.0295 - val_loss: 0.0011 - val_mae: 0.0239
+Epoch 66/100
+32/32 - 3s - 84ms/step - loss: 0.0015 - mae: 0.0286 - val_loss: 0.0010 - val_mae: 0.0231
+Epoch 67/100
+32/32 - 3s - 81ms/step - loss: 0.0015 - mae: 0.0288 - val_loss: 0.0011 - val_mae: 0.0234
+Epoch 68/100
+32/32 - 3s - 81ms/step - loss: 0.0015 - mae: 0.0289 - val_loss: 0.0010 - val_mae: 0.0231
+Epoch 69/100
+32/32 - 2s - 77ms/step - loss: 0.0014 - mae: 0.0282 - val_loss: 0.0011 - val_mae: 0.0234
+Epoch 70/100
+32/32 - 3s - 87ms/step - loss: 0.0014 - mae: 0.0280 - val_loss: 0.0010 - val_mae: 0.0228
+Epoch 71/100
+32/32 - 3s - 88ms/step - loss: 0.0014 - mae: 0.0281 - val_loss: 0.0010 - val_mae: 0.0229
+Epoch 72/100
+32/32 - 3s - 84ms/step - loss: 0.0014 - mae: 0.0280 - val_loss: 0.0010 - val_mae: 0.0225
+Epoch 73/100
+32/32 - 5s - 152ms/step - loss: 0.0014 - mae: 0.0280 - val_loss: 0.0010 - val_mae: 0.0231
+Epoch 74/100
+32/32 - 3s - 80ms/step - loss: 0.0014 - mae: 0.0276 - val_loss: 0.0010 - val_mae: 0.0226
+Epoch 75/100
+32/32 - 3s - 87ms/step - loss: 0.0014 - mae: 0.0277 - val_loss: 9.8147e-04 - val_mae: 0.0224
+Epoch 76/100
+32/32 - 3s - 83ms/step - loss: 0.0014 - mae: 0.0276 - val_loss: 9.5613e-04 - val_mae: 0.0221
+Epoch 77/100
+32/32 - 3s - 80ms/step - loss: 0.0013 - mae: 0.0273 - val_loss: 9.8611e-04 - val_mae: 0.0224
+Epoch 78/100
+32/32 - 3s - 81ms/step - loss: 0.0013 - mae: 0.0265 - val_loss: 0.0010 - val_mae: 0.0224
+Epoch 79/100
+32/32 - 3s - 82ms/step - loss: 0.0013 - mae: 0.0269 - val_loss: 9.9993e-04 - val_mae: 0.0224
+Epoch 80/100
+32/32 - 3s - 83ms/step - loss: 0.0013 - mae: 0.0267 - val_loss: 9.7053e-04 - val_mae: 0.0221
+Epoch 81/100
+32/32 - 3s - 81ms/step - loss: 0.0013 - mae: 0.0266 - val_loss: 9.7316e-04 - val_mae: 0.0221
+Epoch 82/100
+32/32 - 3s - 86ms/step - loss: 0.0013 - mae: 0.0266 - val_loss: 9.8315e-04 - val_mae: 0.0222
+Epoch 83/100
+32/32 - 4s - 111ms/step - loss: 0.0012 - mae: 0.0259 - val_loss: 9.4191e-04 - val_mae: 0.0218
+Epoch 84/100
+32/32 - 2s - 76ms/step - loss: 0.0012 - mae: 0.0255 - val_loss: 0.0010 - val_mae: 0.0221
+Epoch 85/100
+32/32 - 3s - 83ms/step - loss: 0.0012 - mae: 0.0259 - val_loss: 9.3405e-04 - val_mae: 0.0218
+Epoch 86/100
+32/32 - 2s - 77ms/step - loss: 0.0013 - mae: 0.0263 - val_loss: 9.2887e-04 - val_mae: 0.0216
+Epoch 87/100
+32/32 - 3s - 86ms/step - loss: 0.0012 - mae: 0.0262 - val_loss: 9.2518e-04 - val_mae: 0.0216
+Epoch 88/100
+32/32 - 3s - 81ms/step - loss: 0.0012 - mae: 0.0256 - val_loss: 9.2466e-04 - val_mae: 0.0215
+Epoch 89/100
+32/32 - 3s - 84ms/step - loss: 0.0012 - mae: 0.0257 - val_loss: 9.2040e-04 - val_mae: 0.0215
+Epoch 90/100
+32/32 - 2s - 75ms/step - loss: 0.0012 - mae: 0.0257 - val_loss: 9.3952e-04 - val_mae: 0.0215
+Epoch 91/100
+32/32 - 3s - 94ms/step - loss: 0.0012 - mae: 0.0254 - val_loss: 9.2122e-04 - val_mae: 0.0213
+Epoch 92/100
+32/32 - 4s - 119ms/step - loss: 0.0012 - mae: 0.0253 - val_loss: 9.4747e-04 - val_mae: 0.0215
+Epoch 93/100
+32/32 - 4s - 120ms/step - loss: 0.0012 - mae: 0.0256 - val_loss: 9.5713e-04 - val_mae: 0.0218
+Epoch 94/100
+32/32 - 3s - 86ms/step - loss: 0.0012 - mae: 0.0250 - val_loss: 9.5841e-04 - val_mae: 0.0215
+Epoch 95/100
+32/32 - 3s - 82ms/step - loss: 0.0012 - mae: 0.0258 - val_loss: 9.4194e-04 - val_mae: 0.0216
+Epoch 96/100
+32/32 - 3s - 83ms/step - loss: 0.0011 - mae: 0.0250 - val_loss: 8.9377e-04 - val_mae: 0.0209
+Epoch 97/100
+32/32 - 2s - 75ms/step - loss: 0.0011 - mae: 0.0249 - val_loss: 9.3070e-04 - val_mae: 0.0213
+Epoch 98/100
+32/32 - 3s - 83ms/step - loss: 0.0012 - mae: 0.0252 - val_loss: 8.9992e-04 - val_mae: 0.0209
+Epoch 99/100
+32/32 - 3s - 87ms/step - loss: 0.0012 - mae: 0.0254 - val_loss: 9.3305e-04 - val_mae: 0.0215
+Epoch 100/100
+32/32 - 3s - 79ms/step - loss: 0.0012 - mae: 0.0249 - val_loss: 8.9207e-04 - val_mae: 0.0207
+Restoring model weights from the end of the best epoch: 100.
+2026-10-10 17:16:48.303106: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+INFO Epochs completed: 100 (early stop: False)
+INFO Best epoch 100: val_loss=0.000892 val_mae=0.020706 (scaled); reloaded model val_loss=0.000892
+INFO Training time 337.4 s; model saved to E:\ev-charging-forecast\models\ev_demand_lstm.keras
+exit=0
