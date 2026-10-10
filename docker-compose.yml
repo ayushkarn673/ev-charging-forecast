@@ -1,0 +1,38 @@
+# Local development database for the EV Charging Forecast backend (Phase 5).
+#
+# Start:   docker compose up -d
+# Status:  docker compose ps
+# Stop:    docker compose stop          (data is kept in the named volume)
+#
+# Credentials are read from mysql.env (git-ignored; copy mysql.env.example to create it).
+# Port 3307 on 127.0.0.1 only, so it never clashes with the Windows MySQL80 service on 3306
+# and is not reachable from other machines.
+name: evcharge
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: evcharge-mysql
+    restart: unless-stopped
+    env_file:
+      - path: mysql.env
+        required: true
+    environment:
+      MYSQL_DATABASE: ev_charging_db
+      TZ: UTC
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - evcharge-mysql-data:/var/lib/mysql
+    healthcheck:
+      # Connects over TCP as the application user to the application database, so it only
+      # passes once initialisation has finished (TCP is disabled during the init phase).
+      test: ["CMD-SHELL", "mysql --protocol=TCP -h 127.0.0.1 -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" -e 'SELECT 1' \"$$MYSQL_DATABASE\" > /dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 60s
+
+volumes:
+  evcharge-mysql-data:
+    name: evcharge-mysql-data
