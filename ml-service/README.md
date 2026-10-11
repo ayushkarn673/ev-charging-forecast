@@ -26,7 +26,7 @@ uv sync                      # creates .venv from pyproject.toml + uv.lock
 | Preprocess | `uv run preprocess.py` | `dataset/processed/`, scalers + `features.json` in `models/`, `docs/preprocessing_report.md` |
 | Train | `uv run train.py --epochs 300` | `models/ev_demand_lstm.keras`, history, `docs/figures/training_loss_curves.png` |
 | Evaluate on the test split | `uv run evaluate.py` | `models/evaluation/`, `docs/evaluation_report.md` |
-| Tests | `uv run pytest` | 118 tests |
+| Tests | `uv run pytest` | 126 tests |
 
 ## 3. Run the API
 
@@ -46,6 +46,8 @@ observation store are loaded once at startup.
 | GET | `/model-info` | Architecture, features, horizon, training summary, test-set metrics, limitations |
 | GET | `/available-dates` | Supported forecast-time range, per-split periods, list of local dates |
 | POST | `/predict/next-hour` | One-hour-ahead utilization forecast for a historical forecast time |
+| GET | `/evaluation` | Saved Phase 3 test-set metrics (MAE, RMSE, WAPE, baselines); read-only, no inference |
+| GET | `/evaluation/series?start=2020-01-06&end=2020-01-12` | Saved actual vs predicted test-set values (≤ 31 days); read-only |
 
 ### Example
 

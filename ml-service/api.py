@@ -14,6 +14,7 @@ os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 
 import logging  # noqa: E402
 import re  # noqa: E402
+from datetime import date  # noqa: E402
 from contextlib import asynccontextmanager  # noqa: E402
 
 from fastapi import FastAPI, HTTPException, Request  # noqa: E402
@@ -82,6 +83,14 @@ def create_app(service: ForecastService | None = None) -> FastAPI:
     @app.get("/available-dates")
     def available_dates(request: Request):
         return camelize(get_service(request).available_dates())
+
+    @app.get("/evaluation")
+    def evaluation(request: Request):
+        return camelize(get_service(request).evaluation_summary())
+
+    @app.get("/evaluation/series")
+    def evaluation_series(request: Request, start: date, end: date):
+        return camelize(get_service(request).evaluation_series(start, end))
 
     @app.post("/predict/next-hour", response_model=NextHourResponse,
               responses={404: {"model": ErrorResponse}, 422: {"model": ErrorResponse}})

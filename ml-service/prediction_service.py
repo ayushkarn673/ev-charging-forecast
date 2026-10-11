@@ -83,6 +83,25 @@ def load_observations(path=config.HOURLY_SITE_FILE) -> pd.DataFrame:
     return df
 
 
+class EvaluationRangeError(ForecastError):
+    status_code = 422
+    code = "INVALID_EVALUATION_RANGE"
+
+
+EVALUATION_SERIES_MAX_DAYS = 31
+
+
+def load_evaluation_predictions(path=config.TEST_PREDICTIONS_FILE) -> pd.DataFrame | None:
+    """Saved Phase 3 test-set predictions (read-only). None if evaluate.py has not been run."""
+    if not path.exists():
+        return None
+    cols = ["target_timestamp_utc", "actual_utilization", "pred_lstm", "pred_previous_hour", "pred_same_hour_last_week"]
+    df = pd.read_csv(path, usecols=cols, parse_dates=["target_timestamp_utc"]).set_index("target_timestamp_utc")
+    if df.index.tz is None:
+        df.index = df.index.tz_localize("UTC")
+    return df.sort_index()
+
+
 @dataclass
 class ForecastService:
     model: object
@@ -93,6 +112,7 @@ class ForecastService:
     model_config: dict = field(default_factory=dict)
     training_summary: dict = field(default_factory=dict)
     evaluation: dict = field(default_factory=dict)
+    evaluation_predictions: pd.DataFrame | None = None
     model_sha256: str = ""
     loaded_at_utc: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat(timespec="seconds"))
 
@@ -111,6 +131,7 @@ class ForecastService:
             model_config=json.loads(config.MODEL_CONFIG_FILE.read_text(encoding="utf-8")),
             training_summary=json.loads(config.TRAINING_SUMMARY_FILE.read_text(encoding="utf-8")),
             evaluation=json.loads(config.EVAL_METRICS_FILE.read_text(encoding="utf-8")) if config.EVAL_METRICS_FILE.exists() else {},
+            evaluation_predictions=load_evaluation_predictions(),
             model_sha256=hashlib.sha256(config.MODEL_FILE.read_bytes()).hexdigest(),
         )
         svc.check_consistency()
@@ -352,6 +373,53 @@ class ForecastService:
             "rule": "forecastTime must be on the hour, with a timezone offset, and have 192 consecutive valid "
                     "hours of observations before it.",
         }
+
+    # ------------------------------------------------------------------ saved evaluation (read-only)
+    def evaluation_summary(self) -> dict:
+        """Phase 3 test-set metrics exactly as saved by evaluate.py. No inference is run here."""
+        ev = self.evaluation
+        if not ev:
+            raise ForecastError("no saved evaluation found; run evaluate.py", code="EVALUATION_NOT_AVAILABLE")
+        keep = ("n", "mae_pp", "rmse_pp", "mae_spaces", "rmse_spaces", "bias_pp", "wape_percent")
+        meta = ev.get("meta", {})
+        return {
+            "source": "Saved Phase 3 evaluation on the untouched test split (models/evaluation); not live data.",
+            "model_id": f"ev_demand_lstm@sha256:{self.model_sha256[:12]}",
+            "test_period_local": [meta.get("test_first_target_local"), meta.get("test_last_target_local")],
+            "horizon_hours": config.HORIZON,
+            "installed_capacity_spaces": self.capacity,
+            "overall": {k: {m: v[m] for m in keep} for k, v in ev["overall"].items()},
+            "comparisons": ev.get("comparisons", {}),
+            "by_subset": ev.get("by_subset", {}),
+            "mae_pp_by_local_hour": ev.get("mae_pp_by_local_hour", {}),
+            "series_available": self.evaluation_predictions is not None,
+            "default_series_window": list(config.ZOOM_WINDOW_LOCAL),
+        }
+
+    def evaluation_series(self, start, end) -> dict:
+        """Saved actual vs predicted utilization for target hours whose local date is in [start, end]."""
+        df = self.evaluation_predictions
+        if df is None:
+            raise ForecastError("no saved test predictions found; run evaluate.py", code="EVALUATION_NOT_AVAILABLE")
+        start, end = pd.Timestamp(start), pd.Timestamp(end)
+        if end < start:
+            raise EvaluationRangeError("end must not be before start")
+        if (end - start).days + 1 > EVALUATION_SERIES_MAX_DAYS:
+            raise EvaluationRangeError(f"at most {EVALUATION_SERIES_MAX_DAYS} days per request")
+        local = df.index.tz_convert(config.LOCAL_TZ)
+        days = local.tz_localize(None).normalize()
+        mask = (days >= start) & (days <= end)
+        first, last = local.min().date(), local.max().date()
+        if not mask.any():
+            raise EvaluationRangeError(f"no test-set predictions in that range; the test period is {first} to {last}")
+        part, part_local = df[mask], local[mask]
+        rows = [{"target_time": t.isoformat(), "actual": round(float(r.actual_utilization), 6),
+                 "lstm": round(float(r.pred_lstm), 6), "previous_hour": round(float(r.pred_previous_hour), 6),
+                 "same_hour_last_week": round(float(r.pred_same_hour_last_week), 6)}
+                for t, r in zip(part_local, part.itertuples())]
+        return {"source": "Saved Phase 3 test-set predictions (models/evaluation/test_predictions.csv); no new inference.",
+                "units": "utilization ratio (0..1)", "start": str(start.date()), "end": str(end.date()),
+                "test_period": [str(first), str(last)], "points": rows}
 
     def model_info(self) -> dict:
         ev, ts, mc = self.evaluation, self.training_summary, self.model_config

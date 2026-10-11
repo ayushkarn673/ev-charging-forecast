@@ -7,6 +7,20 @@
       "runtimeArgs": ["run", "--directory", "ml-service", "uvicorn", "api:app", "--host", "127.0.0.1", "--port", "8000"],
       "port": 8000,
       "url": "http://127.0.0.1:8000"
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "powershell",
+      "runtimeArgs": ["-NoProfile", "-File", "backend/scripts/with-db-env.ps1", "mvn", "-B", "-ntp", "spring-boot:run"],
+      "port": 8080,
+      "url": "http://127.0.0.1:8080"
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "frontend", "run", "dev"],
+      "port": 5173,
+      "url": "http://127.0.0.1:5173"
     }
   ]
 }
