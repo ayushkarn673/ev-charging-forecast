@@ -35,8 +35,7 @@ was better; utilization never exceeded 70% in the test period. Details: `docs/ev
 
 ## Prerequisites
 
-Windows with Docker Desktop (WSL 2), Java 21, Maven 3.9, Python 3.12 via `uv`
-(Node 24 only for the optional React frontend).
+Windows with Docker Desktop (WSL 2), Java 21, Maven 3.9, Python 3.12 via `uv`.
 Create `mysql.env` from `mysql.env.example` (git-ignored; never commit it).
 
 One-time setup:
@@ -66,8 +65,6 @@ The Streamlit app talks only to the backend (default `http://127.0.0.1:8080`). S
 `EVCHARGE_API_URL` to point it elsewhere and `EVCHARGE_API_TIMEOUT` (seconds, default 20) to change
 the request timeout. Forecasts and model evaluation reach the ML service through the backend.
 
-Alternative frontend (React, kept for now): `cd frontend; npm install; npm run dev` (http://127.0.0.1:5173).
-
 If the first price request after startup reports "Pricing is temporarily unavailable", the model's
 first prediction exceeded the backend's 5-second limit (usually low free memory); try again.
 
@@ -90,7 +87,6 @@ Run one suite at a time, with the demo services stopped (8 GB RAM).
 cd ml-service;    uv run pytest                           # 126 tests (pipeline, model, API)
 cd backend;       .\scripts\with-db-env.ps1 mvn test      # 78 tests (pricing, booking lifecycle, concurrency, client)
 cd streamlit-app; uv run pytest                           # 48 tests (API client, formatting, all screens via AppTest)
-cd frontend;      npm run build                           # React production build check (optional frontend)
 ```
 
 ## Repository layout
@@ -100,7 +96,6 @@ cd frontend;      npm run build                           # React production bui
 | `ml-service/` | preprocessing, training, evaluation, FastAPI inference service (see its README) |
 | `models/`, `ml-model-backup/` | trained model, scalers, metadata, saved evaluation; verified backup |
 | `backend/` | Spring Boot API, Flyway migrations (see `backend/README.md`) |
-| `streamlit-app/` | Streamlit frontend (main UI): `app.py`, `views/`, `evcharge/` client, `tests/` |
-| `frontend/` | React + Vite + Tailwind frontend (alternative, kept for now) |
+| `streamlit-app/` | Streamlit frontend: `app.py`, `views/`, `evcharge/` client, `tests/` |
 | `docs/` | preprocessing and evaluation reports, figures |
 | `docker-compose.yml` | MySQL 8.4 container (`evcharge-mysql`, volume `evcharge-mysql-data`) |

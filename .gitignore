@@ -15,10 +15,6 @@ dataset/raw/
 # Java
 backend/target/
 
-# Node
-frontend/node_modules/
-frontend/dist/
-
 # IDE / OS
 .idea/
 .vscode/
