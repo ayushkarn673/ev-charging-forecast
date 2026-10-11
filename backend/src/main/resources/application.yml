@@ -8,14 +8,16 @@ spring:
     name: evcharge-backend
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3307}/${DB_NAME:ev_charging_db}?connectTimeout=10000&socketTimeout=60000&connectionTimeZone=UTC
+    # connectTimeout 30 s: on a memory-constrained laptop the first TLS handshake + login of a cold JVM
+    # was observed to exceed 10 s. Keep in step with hikari.connection-timeout below.
+    url: jdbc:mysql://${DB_HOST:127.0.0.1}:${DB_PORT:3307}/${DB_NAME:ev_charging_db}?connectTimeout=30000&socketTimeout=60000&connectionTimeZone=UTC
     username: ${DB_USERNAME:evcharge_app}
     password: ${DB_PASSWORD}
     hikari:
       pool-name: evcharge-pool
       maximum-pool-size: 10
       minimum-idle: 2
-      connection-timeout: 10000     # ms to wait for a pooled connection
+      connection-timeout: 30000     # ms to obtain a connection (incl. the first one at startup)
       validation-timeout: 5000      # ms for a connection liveness check
       max-lifetime: 1800000         # 30 min, well below MySQL's 8 h wait_timeout
 

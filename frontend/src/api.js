@@ -50,4 +50,5 @@ export const api = {
   quote: (stationId, startTime) => request(`/api/pricing/quote?${qs({ stationId, startTime })}`),
   bookings: (stationId) => request(`/api/bookings?${qs({ stationId })}`),
   createBooking: (body) => request('/api/bookings', { method: 'POST', body: JSON.stringify(body) }),
+  cancelBooking: (id) => request(`/api/bookings/${encodeURIComponent(id)}/cancel`, { method: 'POST' }),
 }

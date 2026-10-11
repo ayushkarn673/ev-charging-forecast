@@ -18,7 +18,7 @@ The app listens on `http://127.0.0.1:8080` (localhost only; set `SERVER_ADDRESS`
 ## Tests
 
 ```powershell
-.\scripts\with-db-env.ps1 mvn test     # 61 tests, incl. integration tests against Docker MySQL
+.\scripts\with-db-env.ps1 mvn test     # 78 tests, incl. integration tests against Docker MySQL
 mvn test                                # without credentials: DB integration tests are skipped
 ```
 
@@ -50,13 +50,49 @@ stops the application at startup.
 | GET | `/api/forecast/model-info`, `/api/forecast/evaluation` | model metadata, saved test-set metrics |
 | GET | `/api/forecast/evaluation/series?from=2020-02-03&to=2020-02-09` | saved actual vs predicted (≤ 31 days) |
 | GET | `/api/stations` | stations with capacity and base price |
-| GET | `/api/slots/availability?stationId=1&date=2026-10-12` | 24 one-hour slots: booked / available / bookable |
+| GET | `/api/slots/availability?stationId=1&date=2026-10-12` | 24 one-hour slots: `status`, booked, available, bookable |
 | GET | `/api/pricing/quote?stationId=1&startTime=2026-10-12T13:00:00%2B05:30` | price breakdown for one slot |
 | POST | `/api/bookings` | `{stationId, customerName, startTime, quotedFinalPrice?}` → 201 |
 | GET | `/api/bookings[?stationId=]`, `/api/bookings/{id}` | booking history |
+| POST | `/api/bookings/{id}/cancel` | cancel a booking → 200 with the booking (see rules below) |
 
-Errors are RFC 9457 problem responses: 400 validation, 404 unknown station/booking,
-409 slot full or price changed, 422 forecast request rejected by FastAPI, 503 FastAPI unavailable.
+Errors are RFC 9457 problem responses: 400 validation or invalid date, 404 unknown station/booking,
+409 slot full / duplicate booking / price changed / cancellation not allowed, 422 forecast request
+rejected by FastAPI, 503 FastAPI unavailable.
+
+### Availability dates and slot status
+
+`date` must be from **today to today + 14 days in the station's time zone**; earlier or later dates
+return 400 `Invalid request`. Each slot has a `status` computed with the same rules booking creation uses:
+
+| `status` | Meaning | `available` | `bookable` |
+|---|---|---|---|
+| `AVAILABLE` | starts in the future, inside the window, a charger is free | capacity − booked | true |
+| `FULL` | starts in the future, inside the window, every charger booked | 0 | false |
+| `STARTED` | already started (in progress or over) | 0 | false |
+| `NOT_OPEN` | starts after the 14-day window closes | 0 | false |
+
+A started slot is never reported as having free chargers. Booking creation rejects the same slots
+(400): start not in the future, or more than 14 days ahead.
+
+### Cancellation rules (`POST /api/bookings/{id}/cancel`)
+
+- The booking is **kept** and its status becomes `CANCELLED` (price and forecast snapshot unchanged).
+  Capacity counts only `CONFIRMED` bookings, so the charger is free again immediately.
+- Unknown id → 404. Non-positive or non-numeric id → 400.
+- Already `CANCELLED` → **200 with the booking unchanged** (idempotent: a retried request is harmless).
+- `CONFIRMED` but the slot has already started → **409 `Cancellation not allowed`**.
+- The booking row is locked (`SELECT … FOR UPDATE`) during the update, so concurrent cancellations
+  are serialised.
+
+### Duplicate bookings
+
+A customer cannot hold two `CONFIRMED` bookings for the **same station and the same slot**
+(409 `Duplicate booking`). Names are trimmed and internal spaces collapsed before storing and
+comparing, and the comparison is case-insensitive (column collation `utf8mb4_0900_ai_ci`), so
+"Ravi Kumar", " ravi  KUMAR " are the same customer. The same customer may book another hour, another
+station, or the same slot again after cancelling. There are no customer accounts yet, so identity is
+the name only.
 
 ## How pricing works
 
@@ -73,10 +109,14 @@ Errors are RFC 9457 problem responses: 400 validation, 404 unknown station/booki
 ## Booking concurrency
 
 `BookingWriter.insert` runs in a READ_COMMITTED transaction that first locks the station row
-(`SELECT … FOR UPDATE`), then counts confirmed bookings in the slot and inserts only if a charger is
-free. Concurrent requests for the same station therefore run one at a time; a test fires 8
-simultaneous requests at a 1-charger slot and exactly one succeeds. The FastAPI call happens
-before the transaction, so the lock is never held during a network call.
+(`SELECT … FOR UPDATE`), then checks for a duplicate and counts confirmed bookings in the slot, and
+inserts only if both checks pass. Concurrent requests for the same station therefore run one at a
+time. Tests fire 8 simultaneous requests at a 1-charger slot (exactly one succeeds) and 8 simultaneous
+identical requests from one customer at a 4-charger slot (exactly one succeeds, seven are duplicates).
+The FastAPI call happens before the transaction, so the lock is never held during a network call.
+
+The JDBC `connectTimeout` and HikariCP `connection-timeout` are 30 s: on this memory-constrained
+laptop the first TLS handshake and login of a cold JVM was observed to exceed the earlier 10 s.
 
 ## Schema (Flyway, `src/main/resources/db/migration`)
 

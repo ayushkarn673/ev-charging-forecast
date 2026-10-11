@@ -47,7 +47,20 @@ public class BookingService {
 			throw new PriceChangedException("The price for this slot is now " + quote.price().finalPrice() + " "
 					+ quote.currency() + " (you were shown " + request.quotedFinalPrice() + "). Please review it.");
 		}
-		return writer.insert(station.getId(), request.customerName().strip(), start, quote);
+		return writer.insert(station.getId(), normalizeName(request.customerName()), start, quote);
+	}
+
+	/** Cancels a booking; see {@link BookingWriter#cancel(Long)} for the rules. */
+	public BookingResponse cancel(Long bookingId) {
+		return writer.cancel(bookingId);
+	}
+
+	/**
+	 * Trims the name and collapses internal whitespace, so " Ravi  Kumar " and "Ravi Kumar" are the
+	 * same customer for the duplicate check (case is ignored by the database collation).
+	 */
+	static String normalizeName(String customerName) {
+		return customerName.strip().replaceAll("\\s+", " ");
 	}
 
 	@Transactional(readOnly = true)

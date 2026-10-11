@@ -22,11 +22,6 @@ export function wallClock(iso, { date = true, time = true } = {}) {
 
 export const hhmm = (iso) => (iso ? iso.slice(11, 16) : '—')
 
-export function offsetOf(iso) {
-  const m = /([+-]\d{2}:\d{2}|Z)$/.exec(iso || '')
-  return m ? (m[1] === 'Z' ? 'UTC' : `UTC${m[1]}`) : ''
-}
-
 /** Today's date (YYYY-MM-DD) in an IANA time zone. */
 export function todayIn(timeZone) {
   return new Intl.DateTimeFormat('en-CA', { timeZone, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
@@ -38,9 +33,24 @@ export function addDays(isoDate, days) {
   return d.toISOString().slice(0, 10)
 }
 
+// Demand level (backend CongestionLevel) shown as a friendly "vibe".
 export const CONGESTION_STYLE = {
-  LOW: { label: 'Low', cls: 'bg-emerald-100 text-emerald-800 ring-emerald-600/20', dot: 'bg-emerald-500' },
-  MEDIUM: { label: 'Medium', cls: 'bg-amber-100 text-amber-800 ring-amber-600/20', dot: 'bg-amber-500' },
-  HIGH: { label: 'High', cls: 'bg-orange-100 text-orange-800 ring-orange-600/20', dot: 'bg-orange-500' },
-  VERY_HIGH: { label: 'Very high', cls: 'bg-rose-100 text-rose-800 ring-rose-600/20', dot: 'bg-rose-500' },
+  LOW: { label: 'Chill', emoji: '😌', cls: 'bg-emerald-100 text-emerald-800 ring-emerald-600/20', dot: 'bg-emerald-500' },
+  MEDIUM: { label: 'Kinda busy', emoji: '👀', cls: 'bg-amber-100 text-amber-800 ring-amber-600/20', dot: 'bg-amber-500' },
+  HIGH: { label: 'Busy', emoji: '🔥', cls: 'bg-orange-100 text-orange-800 ring-orange-600/20', dot: 'bg-orange-500' },
+  VERY_HIGH: { label: 'Packed', emoji: '🚨', cls: 'bg-rose-100 text-rose-800 ring-rose-600/20', dot: 'bg-rose-500' },
+}
+
+/** "Demo Station 01 - City Centre" -> "City Centre" */
+export function placeName(station) {
+  const name = station?.name ?? station?.stationName ?? ''
+  const i = name.indexOf(' - ')
+  return i >= 0 ? name.slice(i + 3) : name
+}
+
+/** Price multiplier as a change: 0.9 -> "−10%", 1.15 -> "+15%", 1 -> "no change" */
+export function multiplierChange(m) {
+  const pctChange = Math.round((Number(m) - 1) * 100)
+  if (pctChange === 0) return 'no change'
+  return pctChange > 0 ? `+${pctChange}%` : `−${Math.abs(pctChange)}%`
 }

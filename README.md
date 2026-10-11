@@ -71,7 +71,7 @@ The header shows a live status dot for Backend, MySQL and the LSTM service.
 
 ```powershell
 cd ml-service; uv run pytest                              # 126 tests (pipeline, model, API)
-cd backend;   .\scripts\with-db-env.ps1 mvn test          # 61 tests (pricing, booking, concurrency, client)
+cd backend;   .\scripts\with-db-env.ps1 mvn test          # 78 tests (pricing, booking lifecycle, concurrency, client)
 cd frontend;  npm run build                               # production build check
 ```
 

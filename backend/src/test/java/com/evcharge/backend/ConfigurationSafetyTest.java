@@ -44,6 +44,16 @@ class ConfigurationSafetyTest {
 	}
 
 	@Test
+	void databaseConnectionTimeoutsAreThirtySeconds() throws IOException {
+		List<String> lines = settingLines();
+		assertThat(lines).filteredOn(line -> line.startsWith("url: jdbc:mysql:"))
+			.singleElement()
+			.satisfies(url -> assertThat(url).contains("connectTimeout=30000", "socketTimeout=60000",
+					"connectionTimeZone=UTC"));
+		assertThat(lines).contains("connection-timeout: 30000");
+	}
+
+	@Test
 	void flywayCleanIsDisabled() throws IOException {
 		assertThat(settingLines()).contains("clean-disabled: true", "baseline-on-migrate: false");
 	}

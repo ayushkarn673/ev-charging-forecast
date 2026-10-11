@@ -44,4 +44,13 @@ public class BookingController {
 		return service.get(id);
 	}
 
+	/**
+	 * Cancels a booking (status becomes CANCELLED; the record is kept). 200 with the booking;
+	 * 200 unchanged if already cancelled; 404 unknown id; 409 if the slot has already started.
+	 */
+	@PostMapping("/{id}/cancel")
+	public BookingResponse cancel(@PathVariable @Positive Long id) {
+		return service.cancel(id);
+	}
+
 }

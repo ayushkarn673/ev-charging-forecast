@@ -29,7 +29,9 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.function.IntFunction;
 
+import com.jayway.jsonpath.JsonPath;
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
 import org.flywaydb.core.api.MigrationState;
@@ -51,6 +53,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import com.evcharge.backend.booking.BookingDtos.CreateBookingRequest;
+import com.evcharge.backend.common.DuplicateBookingException;
 import com.evcharge.backend.common.SlotUnavailableException;
 import com.evcharge.backend.forecast.ForecastDtos.NextHourResponse;
 import com.evcharge.backend.forecast.ForecastDtos.Prediction;
@@ -434,6 +437,216 @@ class BookingApiIntegrationTests {
 		mvc.perform(post("/api/bookings").contentType(MediaType.APPLICATION_JSON).content("not json"))
 			.andExpect(status().isBadRequest());
 		assertThat(bookingsAt(s)).isZero();
+	}
+
+	// ------------------------------------------------------------------ Stage 1: lifecycle and robustness
+
+	private long bookId(long stationId, String start, String name) throws Exception {
+		String json = book(stationId, start, name).andExpect(status().isCreated()).andReturn().getResponse()
+			.getContentAsString();
+		return ((Number) JsonPath.read(json, "$.id")).longValue();
+	}
+
+	private ResultActions cancel(long bookingId) throws Exception {
+		return mvc.perform(post("/api/bookings/{id}/cancel", bookingId));
+	}
+
+	private String statusOf(long bookingId) {
+		return jdbc.queryForObject("SELECT status FROM bookings WHERE id = ?", String.class, bookingId);
+	}
+
+	@Test
+	void availabilityRejectsPastDatesButAcceptsTodayAndTheWindow() throws Exception {
+		long s = station(2, "100.00");
+		// NOW = 2030-01-15 05:30 Asia/Kolkata -> today is 2030-01-15, last bookable day 2030-01-29
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-14"))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.title").value("Invalid request"))
+			.andExpect(jsonPath("$.detail", startsWith("date 2030-01-14 is in the past")));
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-15"))
+			.andExpect(status().isOk());
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-29"))
+			.andExpect(status().isOk());
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-30"))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.title").value("Invalid request"));
+	}
+
+	@Test
+	void slotStatusesMatchTheBookingRules() throws Exception {
+		long s = station(1, "100.00");
+		book(s, "2030-01-15T10:00:00+05:30", "Full slot").andExpect(status().isCreated());
+
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-15"))
+			// started slots are never reported as having free chargers
+			.andExpect(jsonPath("$.slots[0].status").value("STARTED"))
+			.andExpect(jsonPath("$.slots[0].available").value(0))
+			.andExpect(jsonPath("$.slots[0].bookable").value(false))
+			.andExpect(jsonPath("$.slots[5].status").value("STARTED"))      // 05:00-06:00, now 05:30
+			.andExpect(jsonPath("$.slots[5].available").value(0))
+			.andExpect(jsonPath("$.slots[6].status").value("AVAILABLE"))
+			.andExpect(jsonPath("$.slots[6].available").value(1))
+			.andExpect(jsonPath("$.slots[6].bookable").value(true))
+			.andExpect(jsonPath("$.slots[10].status").value("FULL"))
+			.andExpect(jsonPath("$.slots[10].booked").value(1))
+			.andExpect(jsonPath("$.slots[10].available").value(0))
+			.andExpect(jsonPath("$.slots[10].bookable").value(false));
+
+		// the window closes at NOW + 14 days = 2030-01-29 05:30 local
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-29"))
+			.andExpect(jsonPath("$.slots[5].status").value("AVAILABLE"))
+			.andExpect(jsonPath("$.slots[6].status").value("NOT_OPEN"))
+			.andExpect(jsonPath("$.slots[6].available").value(0));
+		// booking creation applies the same rules as the reported statuses
+		book(s, "2030-01-29T06:00:00+05:30", "Too early").andExpect(status().isBadRequest());
+		book(s, "2030-01-29T05:00:00+05:30", "In window").andExpect(status().isCreated());
+		book(s, "2030-01-15T05:00:00+05:30", "Started").andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void cancellingFreesTheChargerAndKeepsTheRecord() throws Exception {
+		long s = station(1, "120.00");
+		long first = bookId(s, "2030-01-16T10:00:00+05:30", "First");
+		book(s, "2030-01-16T10:00:00+05:30", "Second").andExpect(status().isConflict())
+			.andExpect(jsonPath("$.title").value("Slot unavailable"));
+
+		cancel(first)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(first))
+			.andExpect(jsonPath("$.status").value("CANCELLED"))
+			.andExpect(jsonPath("$.finalPrice").value(138.0));
+		var row = jdbc.queryForMap("SELECT status, final_price, customer_name FROM bookings WHERE id = ?", first);
+		assertThat(row.get("status")).isEqualTo("CANCELLED");                  // not deleted
+		assertThat(row.get("final_price").toString()).isEqualTo("138.00");     // snapshot unchanged
+		assertThat(row.get("customer_name")).isEqualTo("First");
+
+		mvc.perform(get("/api/slots/availability").param("stationId", String.valueOf(s)).param("date", "2030-01-16"))
+			.andExpect(jsonPath("$.slots[10].booked").value(0))
+			.andExpect(jsonPath("$.slots[10].status").value("AVAILABLE"));
+		book(s, "2030-01-16T10:00:00+05:30", "Second").andExpect(status().isCreated());
+		assertThat(bookingsAt(s)).isEqualTo(2);
+	}
+
+	@Test
+	void cancellingTwiceIsIdempotent() throws Exception {
+		long s = station(2, "100.00");
+		long id = bookId(s, "2030-01-16T10:00:00+05:30", "Twice");
+		cancel(id).andExpect(status().isOk()).andExpect(jsonPath("$.status").value("CANCELLED"));
+		cancel(id).andExpect(status().isOk()).andExpect(jsonPath("$.status").value("CANCELLED"));
+		assertThat(statusOf(id)).isEqualTo("CANCELLED");
+		assertThat(bookingsAt(s)).isEqualTo(1);
+	}
+
+	@Test
+	void cancellationValidatesTheBooking() throws Exception {
+		cancel(999999999L).andExpect(status().isNotFound()).andExpect(jsonPath("$.title").value("Not found"));
+		mvc.perform(post("/api/bookings/0/cancel")).andExpect(status().isBadRequest());
+		mvc.perform(post("/api/bookings/abc/cancel")).andExpect(status().isBadRequest());
+	}
+
+	@Test
+	void cannotCancelABookingWhoseSlotHasStarted() throws Exception {
+		long s = station(2, "100.00");
+		// a booking whose slot started before NOW (inserted directly; the API would refuse to create it)
+		jdbc.update("""
+				INSERT INTO bookings (station_id, customer_name, start_time, end_time, status, base_price, price_multiplier,
+				  final_price, currency, predicted_utilization, congestion_level, forecast_mode, forecast_reference_time,
+				  model_id, created_at)
+				VALUES (?, 'Earlier', '2030-01-14 23:30:00', '2030-01-15 00:30:00', 'CONFIRMED', 100, 1.15, 115, 'INR',
+				  0.5, 'MEDIUM', 'historical_replay', '2020-02-03 22:00:00', 'm', UTC_TIMESTAMP(6))""", s);
+		long id = jdbc.queryForObject("SELECT id FROM bookings WHERE station_id = ? AND customer_name = 'Earlier'",
+				Long.class, s);
+		cancel(id).andExpect(status().isConflict()).andExpect(jsonPath("$.title").value("Cancellation not allowed"));
+		assertThat(statusOf(id)).isEqualTo("CONFIRMED");
+	}
+
+	@Test
+	void concurrentCancellationsLeaveOneConsistentResult() throws Exception {
+		long s = station(1, "100.00");
+		long id = bookId(s, "2030-01-16T18:00:00+05:30", "Racer");
+		List<Future<String>> results = race(6, i -> service.cancel(id).status().name());
+		for (Future<String> r : results) {
+			assertThat(r.get()).isEqualTo("CANCELLED");
+		}
+		assertThat(statusOf(id)).isEqualTo("CANCELLED");
+		assertThat(bookingsAt(s)).isEqualTo(1);
+	}
+
+	@Test
+	void sameCustomerCannotBookTheSameSlotTwice() throws Exception {
+		long s = station(4, "100.00");
+		long other = station(4, "100.00");
+		book(s, "2030-01-16T10:00:00+05:30", "Ravi Kumar").andExpect(status().isCreated());
+		book(s, "2030-01-16T10:00:00+05:30", "Ravi Kumar")
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.title").value("Duplicate booking"));
+		// same person written differently (case and spacing) is still a duplicate
+		book(s, "2030-01-16T10:00:00+05:30", "  ravi   KUMAR ").andExpect(status().isConflict());
+		// different customer, different hour or different station are allowed
+		book(s, "2030-01-16T10:00:00+05:30", "Asha").andExpect(status().isCreated());
+		book(s, "2030-01-16T11:00:00+05:30", "Ravi Kumar").andExpect(status().isCreated());
+		book(other, "2030-01-16T10:00:00+05:30", "Ravi Kumar").andExpect(status().isCreated());
+		assertThat(bookingsAt(s)).isEqualTo(3);
+		assertThat(bookingsAt(other)).isEqualTo(1);
+	}
+
+	@Test
+	void customerNameIsStoredNormalised() throws Exception {
+		long s = station(2, "100.00");
+		book(s, "2030-01-16T10:00:00+05:30", "  Priya    Sharma ").andExpect(status().isCreated())
+			.andExpect(jsonPath("$.customerName").value("Priya Sharma"));
+	}
+
+	@Test
+	void customerCanRebookAfterCancelling() throws Exception {
+		long s = station(2, "100.00");
+		long id = bookId(s, "2030-01-16T10:00:00+05:30", "Meena");
+		cancel(id).andExpect(status().isOk());
+		book(s, "2030-01-16T10:00:00+05:30", "Meena").andExpect(status().isCreated());
+		assertThat(jdbc.queryForList("SELECT status FROM bookings WHERE station_id = ? ORDER BY id", String.class, s))
+			.containsExactly("CANCELLED", "CONFIRMED");
+	}
+
+	@Test
+	void concurrentDuplicateRequestsCreateOnlyOneBooking() throws Exception {
+		long s = station(4, "100.00");   // capacity is not the limit here; the duplicate rule is
+		List<Future<String>> results = race(8, i -> {
+			try {
+				service.create(new CreateBookingRequest(s, "Same Person",
+						OffsetDateTime.parse("2030-01-16T18:00:00+05:30"), null));
+				return "created";
+			}
+			catch (DuplicateBookingException ex) {
+				return "duplicate";
+			}
+		});
+		List<String> outcomes = new ArrayList<>();
+		for (Future<String> r : results) {
+			outcomes.add(r.get());
+		}
+		assertThat(outcomes).filteredOn("created"::equals).hasSize(1);
+		assertThat(outcomes).filteredOn("duplicate"::equals).hasSize(7);
+		assertThat(bookingsAt(s)).isEqualTo(1);
+	}
+
+	/** Starts {@code threads} tasks at the same moment and returns their futures. */
+	private static <T> List<Future<T>> race(int threads, IntFunction<T> task) throws InterruptedException {
+		CountDownLatch ready = new CountDownLatch(threads);
+		CountDownLatch go = new CountDownLatch(1);
+		ExecutorService pool = Executors.newFixedThreadPool(threads);
+		List<Future<T>> results = new ArrayList<>();
+		for (int i = 0; i < threads; i++) {
+			int n = i;
+			results.add(pool.submit(() -> {
+				ready.countDown();
+				go.await();
+				return task.apply(n);
+			}));
+		}
+		ready.await();
+		go.countDown();
+		pool.shutdown();
+		return results;
 	}
 
 }

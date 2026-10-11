@@ -115,6 +115,11 @@ public class Booking {
 		return station;
 	}
 
+	/** Marks the booking cancelled; the row is kept so history and the price snapshot remain. */
+	void cancel() {
+		this.status = BookingStatus.CANCELLED;
+	}
+
 	public String getCustomerName() {
 		return customerName;
 	}

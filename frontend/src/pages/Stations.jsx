@@ -3,18 +3,15 @@ import { api } from '../api.js'
 import { useAsync } from '../useAsync.js'
 import { Button, Card, ErrorBox, Field, Spinner, inputCls } from '../components/ui.jsx'
 import SlotGrid from '../components/SlotGrid.jsx'
-import { addDays, money, todayIn } from '../format.js'
+import { addDays, money, placeName, todayIn } from '../format.js'
 
 export default function Stations({ onBook }) {
   const stations = useAsync(() => api.stations(), [])
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-slate-900">Charging stations</h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Demonstration stations (codes starting DEMO-) stored in MySQL. They are not ACN-Data sites. Each slot is one hour;
-          capacity is the number of chargers that can be booked in the same hour.
-        </p>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Stations</h1>
+        <p className="mt-1 text-sm text-slate-500">Pick a day to see which hours are free. Tap a free hour to book it.</p>
       </div>
       {stations.loading && <Spinner />}
       <ErrorBox error={stations.error} onRetry={stations.reload} />
@@ -33,28 +30,28 @@ function StationCard({ station, onBook }) {
 
   return (
     <Card
-      title={
-        <span>
-          {station.name} <span className="ml-1 font-mono text-xs font-normal text-slate-400">{station.code}</span>
+      title={placeName(station)}
+      subtitle={
+        <span className="inline-flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">Demo spot</span>
+          <span>
+            {station.capacity} chargers · base {money(station.basePricePerHour, station.currency)}/hr
+          </span>
         </span>
       }
-      subtitle={station.address}
       actions={
         <Button onClick={() => onBook({ stationId: station.id, date })} variant="secondary">
-          Book at this station
+          Book here
         </Button>
       }
     >
-      <dl className="grid gap-3 text-sm sm:grid-cols-4">
-        <Info k="Capacity" v={`${station.capacity} chargers`} />
-        <Info k="Base price" v={`${money(station.basePricePerHour, station.currency)} / hour`} />
-        <Info k="Time zone" v={station.timeZone} />
-        <Info k="Bookable slots on this day" v={free == null ? '…' : free} />
-      </dl>
-      <div className="mt-5 flex flex-wrap items-end gap-3">
-        <Field label="Availability for">
+      <div className="flex flex-wrap items-end justify-between gap-3">
+        <Field label="Day">
           <input type="date" className={inputCls} min={today} max={addDays(today, 14)} value={date} onChange={(e) => e.target.value && setDate(e.target.value)} />
         </Field>
+        <p className="text-sm text-slate-600" aria-live="polite">
+          {free == null ? '…' : free === 0 ? 'No free hours on this day 😕' : `${free} free hour${free === 1 ? '' : 's'} ✨`}
+        </p>
       </div>
       <div className="mt-4">
         {availability.loading && <Spinner />}
@@ -64,14 +61,5 @@ function StationCard({ station, onBook }) {
         )}
       </div>
     </Card>
-  )
-}
-
-function Info({ k, v }) {
-  return (
-    <div className="rounded-lg bg-slate-50 px-3 py-2">
-      <dt className="text-xs text-slate-500">{k}</dt>
-      <dd className="mt-0.5 font-medium text-slate-900">{v}</dd>
-    </div>
   )
 }

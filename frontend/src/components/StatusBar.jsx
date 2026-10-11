@@ -38,7 +38,7 @@ export default function StatusBar() {
         const s = status[c.key]
         const color = s === 'up' ? 'bg-emerald-500' : s === 'down' ? 'bg-rose-500' : 'bg-slate-300'
         return (
-          <span key={c.key} className="inline-flex items-center gap-1.5 text-slate-300" title={s ? `${c.label}: ${s}` : 'checking…'}>
+          <span key={c.key} className="inline-flex items-center gap-1.5 text-slate-600" title={s ? `${c.label}: ${s}` : 'checking…'}>
             <span className={`h-2 w-2 rounded-full ${color}`} />
             {c.label}
           </span>

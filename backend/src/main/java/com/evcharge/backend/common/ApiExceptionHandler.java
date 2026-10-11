@@ -45,6 +45,21 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		return problem(HttpStatus.CONFLICT, "Slot unavailable", ex.getMessage());
 	}
 
+	@ExceptionHandler(DuplicateBookingException.class)
+	ProblemDetail duplicate(DuplicateBookingException ex) {
+		return problem(HttpStatus.CONFLICT, "Duplicate booking", ex.getMessage());
+	}
+
+	@ExceptionHandler(CancellationNotAllowedException.class)
+	ProblemDetail cancellationNotAllowed(CancellationNotAllowedException ex) {
+		return problem(HttpStatus.CONFLICT, "Cancellation not allowed", ex.getMessage());
+	}
+
+	@ExceptionHandler(InvalidRequestException.class)
+	ProblemDetail invalidRequest(InvalidRequestException ex) {
+		return problem(HttpStatus.BAD_REQUEST, "Invalid request", ex.getMessage());
+	}
+
 	@ExceptionHandler(PriceChangedException.class)
 	ProblemDetail priceChanged(PriceChangedException ex) {
 		return problem(HttpStatus.CONFLICT, "Price changed", ex.getMessage());

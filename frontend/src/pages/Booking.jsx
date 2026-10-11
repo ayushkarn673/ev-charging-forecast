@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { api } from '../api.js'
 import { useAsync } from '../useAsync.js'
-import { Button, Card, CongestionBadge, ErrorBox, Field, ReplayBadge, Spinner, inputCls } from '../components/ui.jsx'
+import { Button, Card, CongestionBadge, ErrorBox, Field, Spinner, inputCls } from '../components/ui.jsx'
 import SlotGrid from '../components/SlotGrid.jsx'
-import { addDays, money, num, pct, todayIn, wallClock } from '../format.js'
+import { addDays, money, multiplierChange, pct, placeName, todayIn, wallClock } from '../format.js'
 
 export default function Booking({ preset, onDone }) {
   const stations = useAsync(() => api.stations(), [])
@@ -74,26 +74,26 @@ export default function Booking({ preset, onDone }) {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-lg font-semibold text-slate-900">Book a charging slot</h1>
-        <p className="mt-1 text-sm text-slate-500">Choose a station, a day and a one-hour slot. The price is calculated by the backend from the LSTM demand forecast.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-slate-900">Book a slot ⚡</h1>
+        <p className="mt-1 text-sm text-slate-500">Pick a spot and an hour. Quieter hours cost less.</p>
       </div>
       {stations.loading && <Spinner />}
       <ErrorBox error={stations.error} onRetry={stations.reload} />
 
       {stations.data && (
         <div className="grid gap-6 lg:grid-cols-5">
-          <Card className="lg:col-span-3" title="1 · Station, day and slot">
+          <Card className="lg:col-span-3" title="1 · Where & when">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Station">
                 <select className={inputCls} value={stationId ?? ''} onChange={(e) => changeStation(Number(e.target.value))}>
                   {stations.data.map((s) => (
                     <option key={s.id} value={s.id}>
-                      {s.code} — {s.name}
+                      {placeName(s)}
                     </option>
                   ))}
                 </select>
               </Field>
-              <Field label={`Day (${station?.timeZone ?? ''})`}>
+              <Field label="Day">
                 <input
                   type="date"
                   className={inputCls}
@@ -116,24 +116,26 @@ export default function Booking({ preset, onDone }) {
           </Card>
 
           <div className="space-y-6 lg:col-span-2">
-            <Card title="2 · Price breakdown" actions={quote.data && <ReplayBadge />}>
-              {!slot && <p className="text-sm text-slate-500">Select a slot to see its demand-based price.</p>}
-              {quote.loading && <Spinner label="Getting the forecast and price…" />}
-              <ErrorBox error={quote.error} />
-              {quote.data && <QuoteDetails quote={quote.data} />}
+            <Card title="2 · Your price">
+              <div aria-live="polite">
+                {!slot && <p className="text-sm text-slate-500">Tap a free hour to see its price 👀</p>}
+                {quote.loading && <Spinner label="Checking the vibe…" />}
+                <ErrorBox error={quote.error} />
+                {quote.data && <QuoteDetails quote={quote.data} />}
+              </div>
             </Card>
 
-            <Card title="3 · Confirm">
+            <Card title="3 · Lock it in">
               <Field label="Your name">
                 <input className={inputCls} maxLength={100} value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Priya Sharma" />
               </Field>
-              <ErrorBox error={submit.error} />
-              <Button className="mt-4 w-full" disabled={!quote.data || !name.trim() || submit.loading} onClick={confirm}>
-                {submit.loading ? 'Booking…' : quote.data ? `Confirm booking · ${money(quote.data.price.finalPrice, quote.data.currency)}` : 'Confirm booking'}
+              <div className="mt-3" aria-live="polite">
+                <ErrorBox error={submit.error} />
+              </div>
+              <Button className="mt-4 w-full py-2.5" disabled={!quote.data || !name.trim() || submit.loading} onClick={confirm}>
+                {submit.loading ? 'Locking it in…' : quote.data ? `Lock it in · ${money(quote.data.price.finalPrice, quote.data.currency)}` : 'Lock it in'}
               </Button>
-              <p className="mt-2 text-xs text-slate-500">
-                The backend re-checks the slot, recalculates the price and refuses the booking if the slot filled up or the price changed.
-              </p>
+              <p className="mt-2 text-center text-xs text-slate-500">We double-check the slot and the price before confirming.</p>
             </Card>
           </div>
         </div>
@@ -143,29 +145,36 @@ export default function Booking({ preset, onDone }) {
 }
 
 function QuoteDetails({ quote }) {
-  const { price, forecast } = quote
+  const { price } = quote
   return (
     <div className="text-sm">
-      <p className="text-slate-600">
-        {wallClock(quote.slotStart)} – {wallClock(quote.slotEnd, { date: false })} at <span className="font-mono">{quote.stationCode}</span>
+      <p className="font-medium text-slate-800">
+        {wallClock(quote.slotStart)} – {wallClock(quote.slotEnd, { date: false })}
       </p>
-      <dl className="mt-4 space-y-2">
-        <Line k="Base price (1 hour)" v={money(price.basePrice, quote.currency)} />
-        <Line k="Predicted utilization" v={pct(price.utilization)} />
-        <Line k="Congestion band" v={<CongestionBadge level={price.congestionLevel} />} />
-        <Line k="Demand multiplier" v={`× ${num(price.multiplier)}`} />
-        <div className="flex justify-between border-t border-slate-200 pt-3 text-base font-semibold text-slate-900">
-          <dt>Final price</dt>
-          <dd className="tabular-nums">{money(price.finalPrice, quote.currency)}</dd>
+      <dl className="mt-4 space-y-2.5">
+        <Line k="Base price" v={money(price.basePrice, quote.currency)} />
+        <Line
+          k="Vibe"
+          v={
+            <span className="inline-flex items-center gap-2">
+              <CongestionBadge level={price.congestionLevel} />
+              <span className="text-xs font-normal text-slate-500">~{pct(price.utilization, 0)} busy</span>
+            </span>
+          }
+        />
+        <Line k="Vibe adjustment" v={multiplierChange(price.multiplier)} />
+        <div className="flex items-baseline justify-between border-t border-slate-200 pt-3">
+          <dt className="font-semibold text-slate-900">You pay</dt>
+          <dd className="text-2xl font-bold tabular-nums text-slate-900">{money(price.finalPrice, quote.currency)}</dd>
         </div>
       </dl>
-      <div className="mt-4 rounded-lg bg-slate-50 p-3 text-xs leading-relaxed text-slate-600">
-        <p>{forecast.mapping}</p>
-        <p className="mt-1.5">
-          Replay forecast time: <span className="font-medium">{wallClock(forecast.replayForecastTime)}</span> (Pacific) · horizon {forecast.horizonHours} h · {forecast.source} ·{' '}
-          <span className="font-mono">{forecast.modelId}</span>
+      <details className="mt-4 rounded-xl bg-slate-50 px-3 py-2 text-xs text-slate-600">
+        <summary className="cursor-pointer font-medium text-slate-700">Why this price?</summary>
+        <p className="mt-2 leading-relaxed">
+          Our AI model predicts how busy this hour usually gets, based on real EV charging history. Chill hours get a
+          discount; busy ones cost a bit more. This is a demo, so the prediction comes from historical data, not live traffic.
         </p>
-      </div>
+      </details>
     </div>
   )
 }
@@ -181,31 +190,34 @@ function Line({ k, v }) {
 
 function Confirmation({ booking, onAnother, onHistory }) {
   return (
-    <Card title="Booking confirmed">
-      <div className="flex items-start gap-4">
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-lg text-emerald-700">✓</div>
-        <div className="flex-1 text-sm">
-          <p className="text-base font-semibold text-slate-900">
-            Booking #{booking.id} — {booking.stationName}
-          </p>
-          <p className="mt-1 text-slate-600">
-            {wallClock(booking.startTime)} – {wallClock(booking.endTime, { date: false })} · {booking.customerName}
-          </p>
-          <dl className="mt-4 grid max-w-md gap-2">
-            <Line k="Status" v={booking.status} />
-            <Line k="Base price" v={money(booking.basePrice, booking.currency)} />
-            <Line k="Congestion / multiplier" v={<span className="inline-flex items-center gap-2"><CongestionBadge level={booking.congestionLevel} /> × {num(booking.priceMultiplier)}</span>} />
-            <Line k="Charged" v={<span className="text-base font-semibold">{money(booking.finalPrice, booking.currency)}</span>} />
-          </dl>
-          <p className="mt-3 text-xs text-slate-500">Saved in MySQL with the forecast it was priced from ({booking.forecastMode}, {booking.modelId}).</p>
-          <div className="mt-5 flex flex-wrap gap-3">
-            <Button onClick={onHistory}>View booking history</Button>
-            <Button variant="secondary" onClick={onAnother}>
-              Book another slot
-            </Button>
+    <div className="mx-auto max-w-lg">
+      <Card>
+        <div className="text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-fuchsia-500 text-2xl text-white shadow" aria-hidden>
+            ⚡
           </div>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight text-slate-900">You're locked in!</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            {placeName(booking)} · {wallClock(booking.startTime)} – {wallClock(booking.endTime, { date: false })}
+          </p>
         </div>
-      </div>
-    </Card>
+        <dl className="mt-6 space-y-2.5 text-sm">
+          <Line k="Booking" v={`#${booking.id} · ${booking.customerName}`} />
+          <Line k="Vibe" v={<CongestionBadge level={booking.congestionLevel} />} />
+          <Line k="Base price" v={money(booking.basePrice, booking.currency)} />
+          <Line k="Vibe adjustment" v={multiplierChange(booking.priceMultiplier)} />
+          <div className="flex items-baseline justify-between border-t border-slate-200 pt-3">
+            <dt className="font-semibold text-slate-900">You pay</dt>
+            <dd className="text-xl font-bold tabular-nums text-slate-900">{money(booking.finalPrice, booking.currency)}</dd>
+          </div>
+        </dl>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Button onClick={onHistory}>My bookings</Button>
+          <Button variant="secondary" onClick={onAnother}>
+            Book another
+          </Button>
+        </div>
+      </Card>
+    </div>
   )
 }
