@@ -1,0 +1,11 @@
+[server]
+address = "127.0.0.1"   # localhost only, like the backend
+port = 8501
+headless = true
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#1d4ed8"
