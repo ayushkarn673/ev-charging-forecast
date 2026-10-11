@@ -5,9 +5,10 @@
 > patterns. They are **not** evidence of real-world Indian EV charging forecast accuracy and must
 > not be reported as such.
 
-This folder is a self-contained experiment. It does not change the production model (`models/`),
-the ACN-Data dataset (`dataset/`), the backup (`ml-model-backup/`), `ml-service/`, the backend,
-the database or the Streamlit app. The application keeps using the Caltech LSTM.
+This folder holds the India model and everything used to build it. It does not change the Caltech model
+(`models/`), the ACN-Data dataset (`dataset/`), the backup (`ml-model-backup/`) or `ml-service/`.
+The Streamlit app shows these predictions on its Model insights page (see "Use in the app"). Booking
+availability and prices still use the Caltech LSTM through the backend.
 
 ## Source and provenance
 
@@ -89,8 +90,7 @@ ml-service\.venv\Scripts\python.exe -I -B experiments\india_ev_lstm\train_eval.p
 | `results/metrics.csv` | validation and test metrics, overall and per city, LSTM and baselines |
 | `results/test_predictions.csv` | every test-hour prediction |
 | `results/training_history.csv`, `results/training_summary.json`, `results/train_log.txt` | training record |
-| `replay_predict.py`, `results/replay_predictions.csv`, `results/replay_manifest.json` | historical-replay predictions for the dashboard, with hashes and checks |
-| `dashboard.py`, `dashboard_core.py`, `tests/test_dashboard.py` | experimental Streamlit dashboard and its tests |
+| `replay_predict.py`, `results/replay_predictions.csv`, `results/replay_manifest.json` | historical-replay predictions used by the app, with hashes and checks |
 
 ## Results (synthetic data — see warning at top)
 
@@ -134,10 +134,10 @@ previous hour −1.71 pp [95%: −1.78, −1.65], same hour last week −0.86 pp
 
 Full tables: `results/metrics.csv`. Bootstrap figures: `results/training_summary.json`.
 
-## Experimental dashboard
+## Use in the app
 
-A standalone Streamlit page for Pune, Mumbai, Delhi NCR and Bengaluru. It is separate from the booking
-app and not connected to bookings, pricing or the production ML API.
+The Streamlit app's **Model insights** page opens on this model (`streamlit-app/evcharge/india.py`).
+It is not connected to bookings, pricing or the FastAPI service.
 
 **Why two steps.** No existing environment has both TensorFlow (in `ml-service`) and Streamlit
 (in `streamlit-app`), and nothing new is installed.
@@ -146,25 +146,16 @@ app and not connected to bookings, pricing or the production ML API.
    complete 24-hour window to `results/replay_predictions.csv`. It refuses to run with less than 1.5 GB free RAM,
    fails on non-finite output, and never clips. It also checks that it reproduces `results/test_predictions.csv`
    (maximum difference 5×10⁻⁷).
-2. **Show them.** `dashboard.py` (with helpers in `dashboard_core.py`) reads those predictions plus `data/city_hourly.csv`.
-   Before showing anything, it checks the model, scalers and data against the hashes in `results/replay_manifest.json`.
-   The Streamlit process never loads TensorFlow.
+2. **Show them.** The app reads those predictions plus `data/city_hourly.csv`. Before showing anything, it checks
+   the model, scalers and data against the hashes in `results/replay_manifest.json`, and the model metadata against
+   the expected inputs. The Streamlit process never loads TensorFlow.
 
 ```powershell
 ml-service\.venv\Scripts\python.exe -I -B experiments\india_ev_lstm\replay_predict.py
-streamlit-app\.venv\Scripts\python.exe -B -m streamlit run experiments\india_ev_lstm\dashboard.py --server.port 8502 --server.address 127.0.0.1 --server.headless true --browser.gatherUsageStats false
-streamlit-app\.venv\Scripts\python.exe -B -m pytest -p no:cacheprovider experiments\india_ev_lstm\tests -q
 ```
 
-**What the page shows:**
-- **Picker:** city, date and hour (IST).
-- **Prediction:** predicted next-hour utilization and its demand category, using the production pricing bands
-  (Low < 40% ≤ Moderate < 70% ≤ High < 90% ≤ Very high).
-- **Comparison:** the simulated actual value, and which period the hour belongs to (training is in-sample; test is held out).
-- **Chart:** actual vs predicted over the previous 7 days.
-
 The first 8 days of each city cannot be predicted, because the features need one week of history plus a
-24-hour window. The page says so instead of inventing values.
+24-hour window. The app says so instead of inventing values. Tests: `streamlit-app/tests/test_india.py`.
 
 ## Limitations
 
@@ -173,4 +164,5 @@ The first 8 days of each city cannot be predicted, because the features need one
 - **Short history.** 180 days in total, so the test period is 27 days in March 2026.
 - **Seasonal effects are untested.** Festivals in the test period are limited to Holi.
 - **Pooled cities.** The model has no input that identifies the city, and each city's capacity is held fixed for the whole period.
-- **Not integrated.** This model is not connected to the FastAPI service, backend or app.
+- **Display only.** The app shows this model's replay predictions, but it is not connected to the FastAPI service
+  or the backend, so it does not affect slot availability or prices.
