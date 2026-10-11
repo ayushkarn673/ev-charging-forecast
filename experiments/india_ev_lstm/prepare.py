@@ -19,7 +19,7 @@ Only reads the CSVs (chunked, selected columns). Never runs code from the archiv
 
 Run (from the repo root, using the ml-service environment without changing it):
     uv run --directory ml-service --frozen python -I ../experiments/india_ev_lstm/prepare.py \
-        --source E:/Temp/claude-scratch/incoming_datasets/datasets/india_ev_4cities
+        --source <extracted datasets.zip>/india_ev_4cities
 """
 from __future__ import annotations
 

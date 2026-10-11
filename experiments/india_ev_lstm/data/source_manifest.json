@@ -1,7 +1,7 @@
 {
   "WARNING": "SYNTHETIC DEMAND. Hourly occupancy/demand/energy are simulated by the dataset's build_real_dataset.py; only the station list is real. Not real-world observations.",
   "created_utc": "2026-10-11T19:03:22+00:00",
-  "source_folder": "E:\\Temp\\claude-scratch\\incoming_datasets\\datasets\\india_ev_4cities",
+  "source_folder": "<extracted datasets.zip>/india_ev_4cities",
   "source_sha256": {
     "station_hourly.csv": "15445b4930b58de9e10f5774011f17e51ddbb252e79e7257222bf6dab5b44306",
     "stations.csv": "49d46024a0c6aa98bbffdcb428e1b71723168a9e35235f38010aec4e37243f08"
