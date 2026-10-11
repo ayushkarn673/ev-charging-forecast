@@ -162,11 +162,13 @@ class BookingApiIntegrationTests {
 	@Test
 	void flywayAppliedSchemaAndDemoSeed() {
 		MigrationInfo[] applied = flyway.info().applied();
-		assertThat(applied).extracting(m -> m.getVersion().getVersion()).contains("1", "2");
+		assertThat(applied).extracting(m -> m.getVersion().getVersion()).contains("1", "2", "3");
 		assertThat(applied).allMatch(m -> m.getState() == MigrationState.SUCCESS);
 		assertThat(flyway.info().pending()).isEmpty();
 		assertThat(jdbc.queryForList("SELECT code FROM stations WHERE code LIKE 'DEMO-%' ORDER BY code", String.class))
 			.containsExactly("DEMO-01", "DEMO-02", "DEMO-03");
+		assertThat(jdbc.queryForList("SELECT name FROM stations WHERE code LIKE 'IN-%' ORDER BY id", String.class))
+			.containsExactly("EVCharge - Pune", "EVCharge - Mumbai", "EVCharge - Delhi NCR", "EVCharge - Bengaluru");
 	}
 
 	@Test

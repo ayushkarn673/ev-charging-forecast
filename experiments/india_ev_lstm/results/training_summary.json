@@ -1,0 +1,52 @@
+{
+  "WARNING": "SYNTHETIC-DEMAND EXPERIMENT: hourly demand is simulated by the dataset generator; results do not measure real-world Indian EV charging forecast accuracy.",
+  "created_utc": "2026-10-11T19:08:53+00:00",
+  "training_seconds": 188.6,
+  "epochs_completed": 42,
+  "best_epoch": 32,
+  "best_val_loss_mse_scaled": 0.0019638321828097105,
+  "windows": {
+    "train": 11328,
+    "val": 2496,
+    "test": 2496
+  },
+  "split_periods_local_target_hours": {
+    "train": [
+      "2025-10-01 00:00:00",
+      "2026-02-03 23:00:00"
+    ],
+    "val": [
+      "2026-02-04 00:00:00",
+      "2026-03-02 23:00:00"
+    ],
+    "test": [
+      "2026-03-03 00:00:00",
+      "2026-03-29 23:00:00"
+    ]
+  },
+  "test_bootstrap_lstm_minus_baseline": {
+    "previous_hour": {
+      "mae_diff_pp": -1.7108006962424298,
+      "ci95_pp": [
+        -1.7760492039232747,
+        -1.6454733471257867
+      ],
+      "days": 26,
+      "resamples": 2000
+    },
+    "same_hour_last_week": {
+      "mae_diff_pp": -0.855304382139865,
+      "ci95_pp": [
+        -1.1382836091263389,
+        -0.6081382406953323
+      ],
+      "days": 26,
+      "resamples": 2000
+    }
+  },
+  "environment": {
+    "python": "3.12.7",
+    "tensorflow": "2.20.0",
+    "keras": "3.15.1"
+  }
+}

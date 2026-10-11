@@ -1,0 +1,60 @@
+{
+  "WARNING": "SYNTHETIC-DEMAND EXPERIMENT: hourly demand is simulated by the dataset generator; results do not measure real-world Indian EV charging forecast accuracy.",
+  "mode": "historical replay over simulated data; not a live forecast",
+  "created_utc": "2026-10-11T19:23:08+00:00",
+  "artifacts_sha256": {
+    "model/india_synthetic_lstm.keras": "2063a7e23125e9af76ce3d9d8db1488ca6db2bf63c8c37ade153c196cac97412",
+    "model/feature_scaler.pkl": "6efadda519c9b232d998dd25da81936ecfd3ca0762344ee796ad53a2ab8bd219",
+    "model/target_scaler.pkl": "6adc3695d95ce2fd63c0d520b3a99e839350a66185f72a3a68174842e4ef9b64",
+    "data/city_hourly.csv": "05e35b10bfcf2babc57720f1496d7d5ab9110b4a4157bf325212bc57ac2fb216",
+    "results/replay_predictions.csv": "068221cb98c965ca5d38bd85a437ae8cc20ded53c087e60fe93680a752d4e5cd"
+  },
+  "split_starts_local": {
+    "val": "2026-02-04 00:00:00",
+    "test": "2026-03-03 00:00:00"
+  },
+  "last_data_hour_local": "2026-03-29 23:00:00",
+  "validation": {
+    "cities": [
+      "Bengaluru",
+      "Delhi NCR",
+      "Mumbai",
+      "Pune"
+    ],
+    "predictions": 16516,
+    "all_finite": true,
+    "outside_0_1_unclipped": 0,
+    "reproduces_saved_test_predictions_max_abs_diff": 4.99916076646123e-07,
+    "saved_test_predictions_compared": 2496
+  },
+  "per_city": {
+    "Bengaluru": {
+      "predictions": 4129,
+      "first_target": "2025-10-09 00:00:00",
+      "last_target": "2026-03-30 00:00:00",
+      "pred_min": 0.104834,
+      "pred_max": 0.480838
+    },
+    "Delhi NCR": {
+      "predictions": 4129,
+      "first_target": "2025-10-09 00:00:00",
+      "last_target": "2026-03-30 00:00:00",
+      "pred_min": 0.110881,
+      "pred_max": 0.506767
+    },
+    "Mumbai": {
+      "predictions": 4129,
+      "first_target": "2025-10-09 00:00:00",
+      "last_target": "2026-03-30 00:00:00",
+      "pred_min": 0.105427,
+      "pred_max": 0.449047
+    },
+    "Pune": {
+      "predictions": 4129,
+      "first_target": "2025-10-09 00:00:00",
+      "last_target": "2026-03-30 00:00:00",
+      "pred_min": 0.1039,
+      "pred_max": 0.460859
+    }
+  }
+}

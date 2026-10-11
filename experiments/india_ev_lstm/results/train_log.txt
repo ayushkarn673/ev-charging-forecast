@@ -1,0 +1,122 @@
+free RAM before TensorFlow import: 1648 MB (minimum 1536 MB)
+{'train': (11328, 24, 11), 'val': (2496, 24, 11), 'test': (2496, 24, 11)}
+Epoch 1/300
+2026-10-12 00:35:43.926532: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+2026-10-12 00:35:57.219872: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_15}}
+45/45 - 16s - 350ms/step - loss: 0.0309 - mae: 0.1322 - val_loss: 0.0072 - val_mae: 0.0679
+Epoch 2/300
+45/45 - 3s - 77ms/step - loss: 0.0102 - mae: 0.0777 - val_loss: 0.0057 - val_mae: 0.0577
+Epoch 3/300
+45/45 - 3s - 71ms/step - loss: 0.0073 - mae: 0.0657 - val_loss: 0.0038 - val_mae: 0.0474
+Epoch 4/300
+45/45 - 3s - 71ms/step - loss: 0.0060 - mae: 0.0596 - val_loss: 0.0031 - val_mae: 0.0433
+Epoch 5/300
+45/45 - 3s - 70ms/step - loss: 0.0055 - mae: 0.0568 - val_loss: 0.0028 - val_mae: 0.0408
+Epoch 6/300
+45/45 - 4s - 80ms/step - loss: 0.0048 - mae: 0.0533 - val_loss: 0.0028 - val_mae: 0.0404
+Epoch 7/300
+45/45 - 4s - 98ms/step - loss: 0.0045 - mae: 0.0514 - val_loss: 0.0026 - val_mae: 0.0386
+Epoch 8/300
+45/45 - 4s - 84ms/step - loss: 0.0039 - mae: 0.0480 - val_loss: 0.0025 - val_mae: 0.0381
+Epoch 9/300
+45/45 - 4s - 83ms/step - loss: 0.0037 - mae: 0.0468 - val_loss: 0.0024 - val_mae: 0.0371
+Epoch 10/300
+45/45 - 3s - 74ms/step - loss: 0.0035 - mae: 0.0452 - val_loss: 0.0023 - val_mae: 0.0364
+Epoch 11/300
+45/45 - 3s - 77ms/step - loss: 0.0034 - mae: 0.0445 - val_loss: 0.0023 - val_mae: 0.0361
+Epoch 12/300
+45/45 - 5s - 110ms/step - loss: 0.0032 - mae: 0.0435 - val_loss: 0.0024 - val_mae: 0.0372
+Epoch 13/300
+45/45 - 4s - 79ms/step - loss: 0.0032 - mae: 0.0430 - val_loss: 0.0022 - val_mae: 0.0358
+Epoch 14/300
+45/45 - 3s - 75ms/step - loss: 0.0031 - mae: 0.0425 - val_loss: 0.0022 - val_mae: 0.0355
+Epoch 15/300
+45/45 - 3s - 75ms/step - loss: 0.0030 - mae: 0.0418 - val_loss: 0.0022 - val_mae: 0.0357
+Epoch 16/300
+45/45 - 5s - 118ms/step - loss: 0.0030 - mae: 0.0417 - val_loss: 0.0023 - val_mae: 0.0359
+Epoch 17/300
+45/45 - 5s - 113ms/step - loss: 0.0029 - mae: 0.0412 - val_loss: 0.0024 - val_mae: 0.0372
+Epoch 18/300
+45/45 - 3s - 73ms/step - loss: 0.0028 - mae: 0.0411 - val_loss: 0.0022 - val_mae: 0.0356
+Epoch 19/300
+45/45 - 4s - 90ms/step - loss: 0.0028 - mae: 0.0404 - val_loss: 0.0022 - val_mae: 0.0356
+Epoch 20/300
+45/45 - 4s - 84ms/step - loss: 0.0026 - mae: 0.0397 - val_loss: 0.0021 - val_mae: 0.0346
+Epoch 21/300
+45/45 - 5s - 104ms/step - loss: 0.0027 - mae: 0.0398 - val_loss: 0.0023 - val_mae: 0.0359
+Epoch 22/300
+45/45 - 3s - 68ms/step - loss: 0.0027 - mae: 0.0397 - val_loss: 0.0023 - val_mae: 0.0359
+Epoch 23/300
+45/45 - 3s - 66ms/step - loss: 0.0027 - mae: 0.0395 - val_loss: 0.0023 - val_mae: 0.0361
+Epoch 24/300
+45/45 - 3s - 69ms/step - loss: 0.0025 - mae: 0.0387 - val_loss: 0.0021 - val_mae: 0.0344
+Epoch 25/300
+45/45 - 3s - 69ms/step - loss: 0.0025 - mae: 0.0388 - val_loss: 0.0020 - val_mae: 0.0339
+Epoch 26/300
+45/45 - 3s - 68ms/step - loss: 0.0025 - mae: 0.0384 - val_loss: 0.0020 - val_mae: 0.0340
+Epoch 27/300
+45/45 - 5s - 120ms/step - loss: 0.0025 - mae: 0.0383 - val_loss: 0.0023 - val_mae: 0.0361
+Epoch 28/300
+45/45 - 3s - 66ms/step - loss: 0.0024 - mae: 0.0379 - val_loss: 0.0021 - val_mae: 0.0343
+Epoch 29/300
+45/45 - 3s - 67ms/step - loss: 0.0026 - mae: 0.0393 - val_loss: 0.0020 - val_mae: 0.0337
+Epoch 30/300
+45/45 - 5s - 115ms/step - loss: 0.0025 - mae: 0.0388 - val_loss: 0.0023 - val_mae: 0.0364
+Epoch 31/300
+45/45 - 3s - 65ms/step - loss: 0.0024 - mae: 0.0380 - val_loss: 0.0021 - val_mae: 0.0346
+Epoch 32/300
+45/45 - 3s - 68ms/step - loss: 0.0024 - mae: 0.0377 - val_loss: 0.0020 - val_mae: 0.0333
+Epoch 33/300
+45/45 - 4s - 81ms/step - loss: 0.0025 - mae: 0.0382 - val_loss: 0.0022 - val_mae: 0.0354
+Epoch 34/300
+45/45 - 4s - 79ms/step - loss: 0.0024 - mae: 0.0380 - val_loss: 0.0020 - val_mae: 0.0338
+Epoch 35/300
+45/45 - 4s - 86ms/step - loss: 0.0023 - mae: 0.0370 - val_loss: 0.0021 - val_mae: 0.0344
+Epoch 36/300
+45/45 - 7s - 163ms/step - loss: 0.0023 - mae: 0.0366 - val_loss: 0.0021 - val_mae: 0.0345
+Epoch 37/300
+45/45 - 7s - 158ms/step - loss: 0.0022 - mae: 0.0364 - val_loss: 0.0020 - val_mae: 0.0340
+Epoch 38/300
+45/45 - 13s - 286ms/step - loss: 0.0023 - mae: 0.0367 - val_loss: 0.0020 - val_mae: 0.0337
+Epoch 39/300
+45/45 - 8s - 169ms/step - loss: 0.0023 - mae: 0.0366 - val_loss: 0.0022 - val_mae: 0.0353
+Epoch 40/300
+45/45 - 5s - 101ms/step - loss: 0.0023 - mae: 0.0369 - val_loss: 0.0022 - val_mae: 0.0359
+Epoch 41/300
+45/45 - 3s - 75ms/step - loss: 0.0024 - mae: 0.0374 - val_loss: 0.0020 - val_mae: 0.0338
+Epoch 42/300
+45/45 - 3s - 68ms/step - loss: 0.0024 - mae: 0.0373 - val_loss: 0.0022 - val_mae: 0.0357
+2026-10-12 00:38:51.635252: E tensorflow/core/framework/node_def_util.cc:680] NodeDef mentions attribute use_unbounded_threadpool which is not in the op definition: Op<name=MapDataset; signature=input_dataset:variant, other_arguments: -> handle:variant; attr=f:func; attr=Targuments:list(type),min=0; attr=output_types:list(type),min=1; attr=output_shapes:list(shape),min=1; attr=use_inter_op_parallelism:bool,default=true; attr=preserve_cardinality:bool,default=false; attr=force_synchronous:bool,default=false; attr=metadata:string,default=""> This may be expected if your graph generating binary is newer  than this binary. Unknown attributes will be ignored. NodeDef: {{node ParallelMapDatasetV2/_14}}
+
+training 188.6s, epochs 42, best epoch 32
+          mae_pp                ...       rmse_pp                    
+model       lstm previous_hour  ... previous_hour same_hour_last_week
+city                            ...                                  
+ALL        1.802         3.513  ...         4.551               3.493
+Bengaluru  1.923         3.706  ...         4.783               3.593
+Delhi NCR  2.066         3.879  ...         4.985               3.603
+Mumbai     2.179         3.637  ...         4.638               4.120
+Pune       1.041         2.831  ...         3.689               2.439
+
+[5 rows x 6 columns]
+{
+  "previous_hour": {
+    "mae_diff_pp": -1.7108006962424298,
+    "ci95_pp": [
+      -1.7760492039232747,
+      -1.6454733471257867
+    ],
+    "days": 26,
+    "resamples": 2000
+  },
+  "same_hour_last_week": {
+    "mae_diff_pp": -0.855304382139865,
+    "ci95_pp": [
+      -1.1382836091263389,
+      -0.6081382406953323
+    ],
+    "days": 26,
+    "resamples": 2000
+  }
+}
+exit=0

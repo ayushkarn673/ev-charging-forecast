@@ -1,0 +1,34 @@
+{
+  "WARNING": "SYNTHETIC DEMAND. Hourly occupancy/demand/energy are simulated by the dataset's build_real_dataset.py; only the station list is real. Not real-world observations.",
+  "created_utc": "2026-10-11T19:03:22+00:00",
+  "source_folder": "E:\\Temp\\claude-scratch\\incoming_datasets\\datasets\\india_ev_4cities",
+  "source_sha256": {
+    "station_hourly.csv": "15445b4930b58de9e10f5774011f17e51ddbb252e79e7257222bf6dab5b44306",
+    "stations.csv": "49d46024a0c6aa98bbffdcb428e1b71723168a9e35235f38010aec4e37243f08"
+  },
+  "timezone_assumed": "Asia/Kolkata (timestamps are naive; IST has no DST)",
+  "target_definition": "utilization = sum(chargers_occupied) / sum(installed total_chargers) per city-hour",
+  "capacity_mode": "installed_fixed (charger faults lower 'working' but not the denominator)",
+  "output": {
+    "file": "data/city_hourly.csv",
+    "sha256": "05e35b10bfcf2babc57720f1496d7d5ab9110b4a4157bf325212bc57ac2fb216"
+  },
+  "station_hourly_rows": 4281120,
+  "stations_per_city": {
+    "Bengaluru": 180,
+    "Delhi NCR": 191,
+    "Mumbai": 200,
+    "Pune": 420
+  },
+  "installed_chargers_per_city": {
+    "Bengaluru": 378,
+    "Delhi NCR": 512,
+    "Mumbai": 237,
+    "Pune": 1937
+  },
+  "time_range_local": [
+    "2025-10-01 00:00:00",
+    "2026-03-29 23:00:00"
+  ],
+  "city_hours": 17280
+}

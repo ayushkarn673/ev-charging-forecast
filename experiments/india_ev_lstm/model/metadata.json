@@ -1,0 +1,104 @@
+{
+  "WARNING": "SYNTHETIC-DEMAND EXPERIMENT: hourly demand is simulated by the dataset generator; results do not measure real-world Indian EV charging forecast accuracy.",
+  "data": "data/city_hourly.csv (see data/source_manifest.json for source hashes and provenance)",
+  "cities": [
+    "Bengaluru",
+    "Delhi NCR",
+    "Mumbai",
+    "Pune"
+  ],
+  "timezone": "Asia/Kolkata (naive timestamps)",
+  "target": "utilization",
+  "target_definition": "sum(chargers_occupied) / sum(installed total_chargers), per city-hour",
+  "capacity_mode": "installed_fixed",
+  "sequence_length": 24,
+  "horizon": 1,
+  "features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "demand_per_charger",
+    "energy_per_charger",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "scaled_features": [
+    "utilization",
+    "utilization_lag_168",
+    "utilization_roll_mean_24",
+    "demand_per_charger",
+    "energy_per_charger"
+  ],
+  "unscaled_features": [
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "is_weekend",
+    "is_holiday"
+  ],
+  "feature_notes": {
+    "demand_per_charger": "replaces production 'arrivals'",
+    "energy_per_charger": "replaces production 'energy_kwh_completed'",
+    "is_holiday": "generator festival windows only; Sundays are covered by is_weekend"
+  },
+  "split_ratios": [
+    0.7,
+    0.15,
+    0.15
+  ],
+  "split_periods_local_target_hours": {
+    "train": [
+      "2025-10-01 00:00:00",
+      "2026-02-03 23:00:00"
+    ],
+    "val": [
+      "2026-02-04 00:00:00",
+      "2026-03-02 23:00:00"
+    ],
+    "test": [
+      "2026-03-03 00:00:00",
+      "2026-03-29 23:00:00"
+    ]
+  },
+  "scalers": {
+    "feature_scaler": "feature_scaler.pkl",
+    "target_scaler": "target_scaler.pkl",
+    "fitted_on": "valid training rows only, all four cities pooled"
+  },
+  "architecture": [
+    "lstm_1:LSTM",
+    "dropout_1:Dropout",
+    "lstm_2:LSTM",
+    "dropout_2:Dropout",
+    "dense:Dense",
+    "utilization_scaled:Dense"
+  ],
+  "parameters": 32417,
+  "input_shape": [
+    null,
+    24,
+    11
+  ],
+  "hyperparameters": {
+    "lstm_units": [
+      64,
+      32
+    ],
+    "dropout": 0.2,
+    "dense_units": 16,
+    "learning_rate": 0.001,
+    "batch_size": 256,
+    "max_epochs": 300,
+    "early_stopping_patience": 10,
+    "seed": 42
+  },
+  "optimizer": "Adam",
+  "loss": "mse",
+  "shuffle": false,
+  "model_file": "india_synthetic_lstm.keras"
+}

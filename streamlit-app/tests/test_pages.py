@@ -11,10 +11,13 @@ from evcharge.fmt import pct
 
 ROOT = Path(__file__).resolve().parents[1]
 SLOT_13 = "2030-01-16T13:00:00+05:30"
+CALTECH = "Caltech (comparison)"   # Model insights opens on the India model; the Caltech view is selected explicitly
 
 
-def run(page: str) -> AppTest:
+def run(page: str, **state) -> AppTest:
     at = AppTest.from_file(str(ROOT / page), default_timeout=60)
+    for key, value in state.items():
+        at.session_state[key] = value
     at.run()
     assert not at.exception, [e.value for e in at.exception]
     return at
@@ -168,7 +171,7 @@ def test_empty_bookings(stub):
 
 # ---------------------------------------------------------------- nerd stats
 def test_nerd_stats_shows_forecast_policy_and_evaluation(stub):
-    at = run("views/nerd_stats.py")
+    at = run("views/nerd_stats.py", nerd_model=CALTECH)
     assert stub.calls_to("GET", "/api/forecast/next-hour")[-1]["query"] == {"forecastTime": "2020-02-05T10:00:00-08:00"}
     metrics = {m.label: m.value for m in at.metric}
     assert metrics["Predicted utilization"] == pct(0.3785)          # value from the stubbed forecast
@@ -184,7 +187,7 @@ def test_nerd_stats_shows_forecast_policy_and_evaluation(stub):
 
 
 def test_nerd_stats_preset_changes_forecast_time(stub):
-    at = run("views/nerd_stats.py")
+    at = run("views/nerd_stats.py", nerd_model=CALTECH)
     at.button(key="preset-Night 03:00").click().run()
     assert stub.calls_to("GET", "/api/forecast/next-hour")[-1]["query"] == {"forecastTime": "2020-02-06T03:00:00-08:00"}
 
@@ -192,7 +195,7 @@ def test_nerd_stats_preset_changes_forecast_time(stub):
 def test_nerd_stats_reports_ml_down(stub):
     stub.routes[("GET", "/api/forecast/status")] = (503, {"title": "Forecast unavailable", "detail": "x"})
     stub.routes[("GET", "/api/forecast/next-hour")] = (503, {"title": "Forecast unavailable", "detail": "x"})
-    at = run("views/nerd_stats.py")
+    at = run("views/nerd_stats.py", nerd_model=CALTECH)
     txt = text_of(at)
     assert ":red-badge[LSTM service: offline]" in txt
     assert "Pricing is temporarily unavailable" in at.error[0].value

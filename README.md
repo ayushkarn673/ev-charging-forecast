@@ -19,7 +19,8 @@ Streamlit (:8501) ──HTTP──▶ Spring Boot (:8080) ──JDBC──▶ My
   same weekday and hour of a fixed test-period week (2020-02-03) — labelled as such in the API and UI.
 - **Validated horizon: 1 hour.** Each booking is one one-hour slot priced from one forecast.
 - **Pricing rules are a policy** (configured thresholds × multipliers), not learned by the model.
-- **Stations and bookings are demonstration data** (`DEMO-` codes), not ACN-Data records.
+- **Stations and bookings are demonstration data** (`DEMO-` codes, plus one sample station per India-model city
+  with `IN-` codes: Pune, Mumbai, Delhi NCR, Bengaluru), not real sites. All slot prices use the Caltech-trained forecast.
 
 ## Results (untouched test set, 1,728 hours, 2019-12-20 → 2020-02-29)
 

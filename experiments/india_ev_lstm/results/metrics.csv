@@ -1,0 +1,31 @@
+split,city,model,n,mae_pp,rmse_pp,wape_percent,bias_pp
+val,ALL,lstm,2496,1.7649,2.3490,6.9038,-0.1950
+val,ALL,previous_hour,2496,3.5279,4.5735,13.8001,-0.0031
+val,ALL,same_hour_last_week,2496,2.4718,3.2553,9.6689,-0.3543
+val,Bengaluru,lstm,624,1.9697,2.5154,7.7803,0.0266
+val,Bengaluru,previous_hour,624,3.7033,4.7458,14.6276,0.0013
+val,Bengaluru,same_hour_last_week,624,2.6646,3.3948,10.5248,-0.2624
+val,Delhi NCR,lstm,624,1.8489,2.3671,6.4862,-0.6293
+val,Delhi NCR,previous_hour,624,3.7785,4.8635,13.2559,-0.0019
+val,Delhi NCR,same_hour_last_week,624,2.5885,3.3104,9.0810,-0.4783
+val,Mumbai,lstm,624,2.2477,2.9000,9.2667,-0.1117
+val,Mumbai,previous_hour,624,3.8583,4.9278,15.9066,-0.0081
+val,Mumbai,same_hour_last_week,624,3.2416,4.0520,13.3642,-0.3354
+val,Pune,lstm,624,0.9932,1.3157,4.1078,-0.0655
+val,Pune,previous_hour,624,2.7714,3.6343,11.4620,-0.0036
+val,Pune,same_hour_last_week,624,1.3923,1.8673,5.7585,-0.3409
+test,ALL,lstm,2496,1.8023,2.3436,6.7476,-0.3318
+test,ALL,previous_hour,2496,3.5131,4.5511,13.1526,0.0017
+test,ALL,same_hour_last_week,2496,2.6576,3.4935,9.9497,0.0128
+test,Bengaluru,lstm,624,1.9233,2.4054,7.2354,-0.1744
+test,Bengaluru,previous_hour,624,3.7058,4.7830,13.9410,0.0021
+test,Bengaluru,same_hour_last_week,624,2.8604,3.5926,10.7608,-0.0861
+test,Delhi NCR,lstm,624,2.0660,2.6189,6.9763,-0.7657
+test,Delhi NCR,previous_hour,624,3.8787,4.9849,13.0974,0.0006
+test,Delhi NCR,same_hour_last_week,624,2.8452,3.6033,9.6075,0.1477
+test,Mumbai,lstm,624,2.1792,2.7514,8.5777,-0.1959
+test,Mumbai,previous_hour,624,3.6372,4.6384,14.3169,0.0020
+test,Mumbai,same_hour_last_week,624,3.1679,4.1202,12.4697,0.0115
+test,Pune,lstm,624,1.0407,1.3244,4.1233,-0.1911
+test,Pune,previous_hour,624,2.8307,3.6891,11.2150,0.0022
+test,Pune,same_hour_last_week,624,1.7569,2.4394,6.9606,-0.0219

@@ -1,3 +1,9 @@
 # Keep the model backup byte-identical on every checkout so SHA256SUMS.txt stays valid
 # (core.autocrlf=true would otherwise rewrite LF text files as CRLF).
 ml-model-backup/** -text
+
+# Same for the India model: results/replay_manifest.json records SHA-256 hashes of these files,
+# and the app refuses to show India forecasts if they differ.
+experiments/india_ev_lstm/data/** -text
+experiments/india_ev_lstm/model/** -text
+experiments/india_ev_lstm/results/** -text

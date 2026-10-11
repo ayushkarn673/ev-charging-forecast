@@ -4,7 +4,7 @@ from datetime import date, timedelta
 import pandas as pd
 import streamlit as st
 
-from evcharge import api
+from evcharge import api, india
 from evcharge.fmt import demand_badge, num, pct, wall_clock
 from evcharge.ui import show_error
 
@@ -31,7 +31,14 @@ def cached_series(start: str, end: str) -> dict:
 
 
 st.title("Model insights")
-st.caption("The forecasting model, its accuracy, and the pricing policy.")
+st.caption("Demand forecasts, model accuracy and the pricing policy.")
+
+# India is the primary model on this page. Its predictions are historical replays on simulated data and are never
+# used for slot availability or prices; the Caltech model (used by the backend's pricing) stays available below.
+MODELS = ["India", "Caltech (comparison)"]
+if st.radio("Forecasting model", MODELS, horizontal=True, key="nerd_model") == MODELS[0]:
+    india.render()
+    st.stop()
 
 # ---------------------------------------------------------------- service status
 checks = [("Backend", api.health), ("MySQL", api.db_health), ("LSTM service", api.ml_status)]
